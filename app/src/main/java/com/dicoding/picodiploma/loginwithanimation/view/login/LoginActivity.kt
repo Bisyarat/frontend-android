@@ -34,17 +34,24 @@ class LoginActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
+        validateWhenClickSubmitButtton()
         rulesEditText()
-
-
     }
 
+    private fun validateWhenClickSubmitButtton(){
+        binding.loginButton.setOnClickListener {
+            if (binding.emailEditText.text.toString().length == 0){
+                binding.emailEditTextLayout.error = getString(R.string.errorEmptyField)
+            }
+            if (binding.passwordEditText.text.toString().length == 0){
+                binding.passwordEditTextLayout.error = getString(R.string.errorEmptyField)
+            }
+        }
+    }
     private fun rulesEditText(){
         binding.emailEditText.doAfterTextChanged {text ->
             if (!Patterns.EMAIL_ADDRESS.matcher(text).matches()){
                 binding.emailEditTextLayout.error = getString(R.string.errorEmail)
-            } else if (text!!.length == 0){
-                binding.emailEditTextLayout.error = getString(R.string.errorEmptyField)
             }
             else{
                 binding.emailEditTextLayout.error = null
