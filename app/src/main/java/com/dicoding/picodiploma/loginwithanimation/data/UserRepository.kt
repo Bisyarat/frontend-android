@@ -14,10 +14,10 @@ class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) {
-    fun register(name: String, email: String, password: String) = liveData {
+    fun register(user: UserModel) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.register(name, email, password)
+            val successResponse = apiService.register(user.name!!, user.email!!, user.password!!)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
