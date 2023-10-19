@@ -107,9 +107,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
         app:startIconDrawable="@drawable/ic_baseline_lock_24"
-        app:counterEnabled="true"
         app:helperText="@string/required"
         app:helperTextTextColor="@color/design_default_color_error"
+        app:counterEnabled="true"
         app:counterMaxLength="15"
         app:errorEnabled="true"
         >
