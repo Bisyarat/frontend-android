@@ -1,12 +1,30 @@
 package com.dicoding.picodiploma.loginwithanimation.data
 
+import androidx.lifecycle.liveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.HttpException
 
 class UserRepository private constructor(
-    private val userPreference: UserPreference
+    private val userPreference: UserPreference,
+    private val apiService: ApiService
 ) {
+    fun register(name: String, email: String, password: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.register(name, email, password)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
+    }
 
     suspend fun saveSession(user: UserModel) {
         userPreference.saveSession(user)
@@ -24,10 +42,11 @@ class UserRepository private constructor(
         @Volatile
         private var instance: UserRepository? = null
         fun getInstance(
-            userPreference: UserPreference
+            userPreference: UserPreference,
+            apiService: ApiService
         ): UserRepository =
             instance ?: synchronized(this) {
-                instance ?: UserRepository(userPreference)
+                instance ?: UserRepository(userPreference, apiService)
             }.also { instance = it }
     }
 }
