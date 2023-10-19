@@ -3,6 +3,7 @@ package com.dicoding.picodiploma.loginwithanimation.data
 import androidx.lifecycle.liveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
 import com.google.gson.Gson
@@ -23,6 +24,18 @@ class UserRepository private constructor(
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
             emit(ResultState.Error(errorResponse.message))
+        }
+    }
+
+    fun login(user: UserModel) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.login(user.email!!, user.password!!)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+            emit(ResultState.Error(errorResponse.message!!))
         }
     }
 

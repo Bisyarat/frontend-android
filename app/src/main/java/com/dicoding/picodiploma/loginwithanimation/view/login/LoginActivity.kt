@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Patterns
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import com.dicoding.picodiploma.loginwithanimation.R
+import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityLoginBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
@@ -113,10 +115,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun successValidate() {
         val email = binding.emailEditText.text.toString()
-        viewModel.saveSession(UserModel(email, "sample_token"))
+        val password = binding.passwordEditText.text.toString()
+
+        checkLoginFromApi(email, password)
+    }
+
+    private fun alertBerhasil(message: String){
         AlertDialog.Builder(this).apply {
             setTitle("Yeah!")
-            setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+            setMessage("[$message]Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
             setPositiveButton("Lanjut") { _, _ ->
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -126,6 +133,49 @@ class LoginActivity : AppCompatActivity() {
             create()
             show()
         }
+    }
+
+    private fun checkLoginFromApi(email: String, password: String) : Boolean{
+        var dataAvailable: Boolean = false
+        viewModel.login(UserModel(email, null, false, null, password)).observe(this) { result ->
+            run {
+                if (result != null) {
+                    when (result) {
+                        is ResultState.Loading -> {
+                            showLoading(true)
+                            dataAvailable = false
+                        }
+                        is ResultState.Success -> {
+                            val message = result.data.message!!
+                            val token = result.data.loginResult?.token
+
+                            showToast(message)
+                            showLoading(false)
+                            viewModel.saveSession(UserModel(email, token))
+                            alertBerhasil(message)
+                            dataAvailable = true
+                        }
+
+                        is ResultState.Error -> {
+                            showToast(result.error)
+                            showLoading(false)
+                            dataAvailable = false
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return dataAvailable
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }
