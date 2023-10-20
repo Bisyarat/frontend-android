@@ -39,7 +39,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupView()
-//        setupAction()
         rulesEditText()
         validateWhenClickSubmitButtton()
     }
@@ -106,12 +105,6 @@ class LoginActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
     }
-
-//    private fun setupAction() {
-//        binding.loginButton.setOnClickListener {
-//            successValidate()
-//        }
-//    }
 
     private fun successValidate() {
         val email = binding.emailEditText.text.toString()
