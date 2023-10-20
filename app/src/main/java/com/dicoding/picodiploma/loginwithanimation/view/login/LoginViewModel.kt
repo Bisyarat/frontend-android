@@ -12,4 +12,6 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             repository.saveSession(user)
         }
     }
+
+    fun login(user: UserModel) = repository.login(user)
 }
