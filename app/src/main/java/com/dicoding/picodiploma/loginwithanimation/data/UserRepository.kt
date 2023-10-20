@@ -5,6 +5,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,7 @@ class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) {
+    //From API
     fun register(user: UserModel) = liveData {
         emit(ResultState.Loading)
         try {
@@ -39,6 +41,19 @@ class UserRepository private constructor(
         }
     }
 
+    fun getStories() = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getStories()
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, StoryResponse::class.java)
+            emit(ResultState.Error(errorResponse.message!!))
+        }
+    }
+
+    //From Shared Preference
     suspend fun saveSession(user: UserModel) {
         userPreference.saveSession(user)
     }
