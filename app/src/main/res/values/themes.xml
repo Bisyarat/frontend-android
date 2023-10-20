@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.LoginWithAnimation" parent="Base.Theme.LoginWithAnimation" />
+
+    <style name="Theme.WithActionBar" parent="Theme.Material3.DayNight" >
+        <item name="colorPrimary">@color/blue</item>
+    </style>
 </resources>

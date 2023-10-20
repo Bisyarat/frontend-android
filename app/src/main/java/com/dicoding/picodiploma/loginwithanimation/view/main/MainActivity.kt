@@ -3,10 +3,16 @@ package com.dicoding.picodiploma.loginwithanimation.view.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.picodiploma.loginwithanimation.data.ResultState
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
@@ -30,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
+        setListStory()
 //        setupAction()
     }
 
@@ -43,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        supportActionBar?.hide()
+        supportActionBar?.show()
     }
 
 //    private fun setupAction() {
@@ -51,5 +58,46 @@ class MainActivity : AppCompatActivity() {
 //            viewModel.logout()
 //        }
 //    }
+
+    private fun setListStory() {
+        viewModel.getStories().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is ResultState.Loading -> {
+                        showLoading(true)
+                    }
+                    is ResultState.Success -> {
+                        showToast(result.data.message!!)
+                        setAdapterListStories(result.data.listStory)
+                        showLoading(false)
+                    }
+
+                    is ResultState.Error -> {
+                        showToast(result.error)
+                        showLoading(false)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setAdapterListStories(item: List<ListStoryItem>){
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStories.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding.rvStories.addItemDecoration(itemDecoration)
+
+        val adapter = StoryAdapter()
+        adapter.submitList(item)
+        binding.rvStories.adapter = adapter
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
 }
