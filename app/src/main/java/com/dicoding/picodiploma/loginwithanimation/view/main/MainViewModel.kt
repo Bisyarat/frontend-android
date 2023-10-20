@@ -19,4 +19,5 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
+    fun getStories() = repository.getStories()
 }
