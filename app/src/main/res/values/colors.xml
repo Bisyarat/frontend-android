@@ -5,6 +5,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="navy">#2D3D4F</color>
-    <color name="blue">#1C7193</color>
+    <color name="blue">#074D68</color>
+    <color name="brown">#00BCD4</color>
 
 </resources>
