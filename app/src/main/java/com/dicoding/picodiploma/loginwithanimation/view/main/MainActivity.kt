@@ -15,6 +15,8 @@ import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStory
+import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -81,19 +83,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setAdapterListStories(item: List<ListStoryItem>){
+    private fun setAdapterListStories(listItem: List<ListStoryItem>){
         val layoutManager = LinearLayoutManager(this)
         binding.rvStories.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStories.addItemDecoration(itemDecoration)
 
         val adapter = StoryAdapter()
-        adapter.submitList(item)
+        adapter.submitList(listItem)
         binding.rvStories.adapter = adapter
 
         StoryAdapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
             override fun onItemClicked(item: ListStoryItem) {
-               Toast.makeText(this@MainActivity , "tes", Toast.LENGTH_SHORT).show()
+                showSelectedStory(item)
             }
 
         })
@@ -105,6 +107,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showSelectedStory(item: ListStoryItem){
+        Toast.makeText(this@MainActivity , item.name, Toast.LENGTH_SHORT).show()
+
+        val detailStory = DetailStory(
+            item.photoUrl!!,
+            item.name!!,
+            item.description!!
+        )
+
+        val intentWithParcelable = Intent(this@MainActivity, DetailStoryActivity::class.java)
+        intentWithParcelable.putExtra(DetailStoryActivity.DATA_STORY, detailStory)
+        this.startActivity(intentWithParcelable)
     }
 
 }
