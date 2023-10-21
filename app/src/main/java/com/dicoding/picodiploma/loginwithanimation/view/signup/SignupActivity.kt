@@ -107,7 +107,6 @@ class SignupActivity : AppCompatActivity() {
             }
 
         }
-
     }
 
     private fun finalValidate() {
