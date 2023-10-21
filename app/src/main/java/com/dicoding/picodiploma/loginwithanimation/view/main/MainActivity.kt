@@ -6,14 +6,19 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
+import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
+import com.dicoding.picodiploma.loginwithanimation.databinding.ItemRowStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStory
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStoryActivity
@@ -24,10 +29,12 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var binding: ActivityMainBinding
+//    private lateinit var bindingDetailStory: ItemRowStoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+//        bindingDetailStory = ItemRowStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.getSession().observe(this) { user ->
@@ -120,7 +127,17 @@ class MainActivity : AppCompatActivity() {
 
         val intentWithParcelable = Intent(this@MainActivity, DetailStoryActivity::class.java)
         intentWithParcelable.putExtra(DetailStoryActivity.DATA_STORY, detailStory)
-        this.startActivity(intentWithParcelable)
+
+        this.startActivity(intentWithParcelable, ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity).toBundle())
+
+//        val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//            this@MainActivity,
+//            Pair(bindingDetailStory.photoStory, "thumbnail"),
+//            Pair(bindingDetailStory.tvTitle, "title"),
+//            Pair(bindingDetailStory.tvDescription, "description")
+//        )
+//
+//        this.startActivity(intentWithParcelable, optionsCompat.toBundle())
     }
 
 }
