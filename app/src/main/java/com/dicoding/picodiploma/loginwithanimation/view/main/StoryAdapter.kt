@@ -18,6 +18,9 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val dataStory = getItem(position)
         holder.bind(dataStory)
+        holder.itemView.setOnClickListener {
+            onItemClickCallback.onItemClicked(dataStory)
+        }
     }
 
     class MyViewHolder(private val binding: ItemRowStoryBinding) : RecyclerView.ViewHolder(binding.root){
@@ -41,5 +44,15 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_
             }
         }
 
+        private lateinit var onItemClickCallback: OnItemClickCallback
+
+        fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
+            this.onItemClickCallback = onItemClickCallback
+        }
+
+    }
+
+    interface OnItemClickCallback{
+        fun onItemClicked(item: ListStoryItem)
     }
 }
