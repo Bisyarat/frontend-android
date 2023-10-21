@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         setupView()
         setListStory()
 //        setupAction()
+        fabOnClick()
     }
 
     private fun setupView() {
@@ -138,6 +139,12 @@ class MainActivity : AppCompatActivity() {
 //        )
 //
 //        this.startActivity(intentWithParcelable, optionsCompat.toBundle())
+    }
+
+    private fun fabOnClick(){
+        binding.fabAdd.setOnClickListener {
+            Toast.makeText(this@MainActivity , "FAB", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
