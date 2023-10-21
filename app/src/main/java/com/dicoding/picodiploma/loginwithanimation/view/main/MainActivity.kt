@@ -90,6 +90,13 @@ class MainActivity : AppCompatActivity() {
         val adapter = StoryAdapter()
         adapter.submitList(item)
         binding.rvStories.adapter = adapter
+
+        StoryAdapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
+            override fun onItemClicked(item: ListStoryItem) {
+               Toast.makeText(this@MainActivity , "tes", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun showToast(message: String) {
