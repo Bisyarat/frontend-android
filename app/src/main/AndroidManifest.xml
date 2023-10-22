@@ -17,6 +17,8 @@
         android:theme="@style/Theme.LoginWithAnimation">
         <activity
             android:name=".view.addStory.AddStoryActivity"
+            android:theme="@style/Theme.WithActionBarNoAnimation"
+            android:label=""
             android:exported="false" />
         <activity
             android:name=".view.detailStory.DetailStoryActivity"

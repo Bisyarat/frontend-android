@@ -58,4 +58,8 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.13.1")
 
+    implementation("androidx.exifinterface:exifinterface:1.3.6")
+
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 }
