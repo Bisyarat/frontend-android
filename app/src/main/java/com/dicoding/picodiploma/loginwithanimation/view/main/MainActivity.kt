@@ -3,6 +3,8 @@ package com.dicoding.picodiploma.loginwithanimation.view.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -14,6 +16,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailStoryBinding
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         setListStory()
 //        setupAction()
         fabOnClick()
+        swipeRefreshLayout()
     }
 
     private fun setupView() {
@@ -149,6 +153,19 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
             this.startActivity(intent)
         }
+    }
+
+    private fun swipeRefreshLayout(){
+        binding.swipeRefresh.setOnRefreshListener( object: SwipeRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                binding.swipeRefresh.isRefreshing = true
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.swipeRefresh.isRefreshing = false
+                    setListStory()
+                }, 1000)
+            }
+
+        })
     }
 
 }
