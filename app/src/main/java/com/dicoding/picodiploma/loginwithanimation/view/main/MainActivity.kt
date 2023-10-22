@@ -20,6 +20,7 @@ import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailSto
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.databinding.ItemRowStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.addStory.AddStoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStory
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
@@ -144,6 +145,9 @@ class MainActivity : AppCompatActivity() {
     private fun fabOnClick(){
         binding.fabAdd.setOnClickListener {
             Toast.makeText(this@MainActivity , "FAB", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
+            this.startActivity(intent)
         }
     }
 
