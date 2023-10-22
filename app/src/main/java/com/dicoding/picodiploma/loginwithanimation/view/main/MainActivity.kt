@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                         showLoading(true)
                     }
                     is ResultState.Success -> {
-                        showToast(result.data.message!!)
+                        showToast("Berhasil Update Story")
                         setAdapterListStories(result.data.listStory)
                         showLoading(false)
                     }
