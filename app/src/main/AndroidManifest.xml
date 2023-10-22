@@ -18,7 +18,8 @@
         <activity
             android:name=".view.addStory.AddStoryActivity"
             android:theme="@style/Theme.WithActionBarNoAnimation"
-            android:label=""
+            android:parentActivityName=".view.main.MainActivity"
+            android:label="Add Story"
             android:exported="false" />
         <activity
             android:name=".view.detailStory.DetailStoryActivity"

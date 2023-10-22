@@ -42,6 +42,8 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         binding.galleryButton.setOnClickListener {
             showToast("Menjalankan Gallery")
             startGallery()
