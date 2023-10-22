@@ -31,6 +31,7 @@ class AddStoryActivity : AppCompatActivity() {
             Toast.makeText(this@AddStoryActivity, "Menjalankan Camera", Toast.LENGTH_SHORT).show()
             startCamera()
         }
+
     }
 
     private fun startGallery() {

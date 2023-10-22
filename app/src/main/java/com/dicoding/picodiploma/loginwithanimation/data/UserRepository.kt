@@ -9,6 +9,8 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryRes
 import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 
@@ -45,6 +47,18 @@ class UserRepository private constructor(
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.getStories()
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, StoryResponse::class.java)
+            emit(ResultState.Error(errorResponse.message!!))
+        }
+    }
+
+    fun addNewStory(file: MultipartBody.Part, description: RequestBody) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.addNewStory(file, description)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
