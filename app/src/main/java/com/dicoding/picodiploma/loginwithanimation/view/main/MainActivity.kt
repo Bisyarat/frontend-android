@@ -37,12 +37,10 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var binding: ActivityMainBinding
-//    private lateinit var bindingDetailStory: ItemRowStoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-//        bindingDetailStory = ItemRowStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.getSession().observe(this) { user ->
@@ -54,7 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setListStory()
-//        setupAction()
         fabOnClick()
         swipeRefreshLayout()
     }
@@ -86,12 +83,6 @@ class MainActivity : AppCompatActivity() {
         }
         supportActionBar?.show()
     }
-
-//    private fun setupAction() {
-//        binding.logoutButton.setOnClickListener {
-//            viewModel.logout()
-//        }
-//    }
 
     private fun setListStory() {
         viewModel.getStories().observe(this) { result ->
@@ -154,21 +145,10 @@ class MainActivity : AppCompatActivity() {
         intentWithParcelable.putExtra(DetailStoryActivity.DATA_STORY, detailStory)
 
         this.startActivity(intentWithParcelable, ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity).toBundle())
-
-//        val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//            this@MainActivity,
-//            Pair(bindingDetailStory.photoStory, "thumbnail"),
-//            Pair(bindingDetailStory.tvTitle, "title"),
-//            Pair(bindingDetailStory.tvDescription, "description")
-//        )
-//
-//        this.startActivity(intentWithParcelable, optionsCompat.toBundle())
     }
 
     private fun fabOnClick(){
         binding.fabAdd.setOnClickListener {
-            Toast.makeText(this@MainActivity , "FAB", Toast.LENGTH_SHORT).show()
-
             val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
             this.startActivity(intent)
         }
