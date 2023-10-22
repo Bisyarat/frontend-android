@@ -19,5 +19,9 @@
     <string name="errorEmptyField">Field Tidak Boleh Kosong</string>
     <string name="tv_title">Judul Story</string>
     <string name="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur suscipit ullamcorper ex, consequat placerat velit venenatis ac. Aliquam erat volutpat. Vestibulum sodales eros vitae diam bibendum, in accumsan ipsum pharetra. Donec nibh mauris, lacinia lacinia sodales eu, posuere vel sem. Morbi maximus nunc at sem fermentum, ac semper orci gravida.</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload">Upload</string>
+    <string name="ketik_des">description</string>
 
 </resources>
