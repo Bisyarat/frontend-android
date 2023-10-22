@@ -9,6 +9,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityAddStoryBinding
+import com.dicoding.picodiploma.loginwithanimation.utils.getImageUri
 
 class AddStoryActivity : AppCompatActivity() {
 
@@ -25,27 +26,47 @@ class AddStoryActivity : AppCompatActivity() {
             Toast.makeText(this@AddStoryActivity, "Menjalankan Gallery", Toast.LENGTH_SHORT).show()
             startGallery()
         }
+
+        binding.cameraButton.setOnClickListener {
+            Toast.makeText(this@AddStoryActivity, "Menjalankan Camera", Toast.LENGTH_SHORT).show()
+            startCamera()
+        }
     }
 
-    private fun startGallery(){
+    private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private fun startCamera() {
+        currentImageUri = getImageUri(this)
+        launcherIntentCamera.launch(currentImageUri)
     }
 
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
-    ) {uri: Uri? ->
-        if (uri != null){
+    ) { uri: Uri? ->
+        if (uri != null) {
             currentImageUri = uri
             showImage()
-        } else{
+        } else {
             Log.d("Photo Picker", "No Media Selected")
         }
     }
 
-    private fun showImage(){
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
+        if (isSuccess) {
+            showImage()
+        }
+    }
+
+    private fun showImage() {
         currentImageUri.let {
             Log.d("Image uri", "showImage: $it")
             binding.previewImageView.setImageURI(it)
         }
     }
+
+
 }
