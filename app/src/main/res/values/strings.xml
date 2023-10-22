@@ -23,5 +23,6 @@
     <string name="gallery">Gallery</string>
     <string name="upload">Upload</string>
     <string name="ketik_des">description</string>
+    <string name="empty_image_warning">Tidak ada gambar!</string>
 
 </resources>
