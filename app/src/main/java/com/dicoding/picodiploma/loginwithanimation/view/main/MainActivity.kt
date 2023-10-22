@@ -5,6 +5,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -15,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailStoryBinding
@@ -33,12 +37,10 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var binding: ActivityMainBinding
-//    private lateinit var bindingDetailStory: ItemRowStoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-//        bindingDetailStory = ItemRowStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.getSession().observe(this) { user ->
@@ -50,9 +52,23 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setListStory()
-//        setupAction()
         fabOnClick()
         swipeRefreshLayout()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_logout ->  {
+                viewModel.logout()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupView() {
@@ -68,12 +84,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.show()
     }
 
-//    private fun setupAction() {
-//        binding.logoutButton.setOnClickListener {
-//            viewModel.logout()
-//        }
-//    }
-
     private fun setListStory() {
         viewModel.getStories().observe(this) { result ->
             if (result != null) {
@@ -82,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                         showLoading(true)
                     }
                     is ResultState.Success -> {
-                        showToast(result.data.message!!)
+                        showToast("Berhasil Update Story")
                         setAdapterListStories(result.data.listStory)
                         showLoading(false)
                     }
@@ -135,21 +145,10 @@ class MainActivity : AppCompatActivity() {
         intentWithParcelable.putExtra(DetailStoryActivity.DATA_STORY, detailStory)
 
         this.startActivity(intentWithParcelable, ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity).toBundle())
-
-//        val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//            this@MainActivity,
-//            Pair(bindingDetailStory.photoStory, "thumbnail"),
-//            Pair(bindingDetailStory.tvTitle, "title"),
-//            Pair(bindingDetailStory.tvDescription, "description")
-//        )
-//
-//        this.startActivity(intentWithParcelable, optionsCompat.toBundle())
     }
 
     private fun fabOnClick(){
         binding.fabAdd.setOnClickListener {
-            Toast.makeText(this@MainActivity , "FAB", Toast.LENGTH_SHORT).show()
-
             val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
             this.startActivity(intent)
         }
