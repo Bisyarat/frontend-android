@@ -85,17 +85,6 @@ class LoginActivity : AppCompatActivity() {
                 validateEmailText = true
             }
         }
-//        binding.passwordEditText.doOnTextChanged { text, start, before, count ->
-//            if (text!!.length < 8) {
-//                binding.passwordEditTextLayout.error = getString(R.string.error)
-//                validatePasswordText = false
-//            } else {
-//                binding.passwordEditTextLayout.error = null
-//                validatePasswordText = true
-////                Toast.makeText(this, validatePasswordText.toString(), Toast.LENGTH_SHORT ).show()
-//
-//            }
-//        }
     }
 
 
