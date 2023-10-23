@@ -31,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     var validateEmailText = false
-    var validatePasswordText = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             val emailText = binding.emailEditText.text.toString()
             val passwordText = binding.passwordEditText.text.toString()
+            val statePasswordText = if (passwordText.length <= 8) false else true
 
             if (emailText.length === 0) {
                 binding.emailEditTextLayout.error = getString(R.string.errorEmptyField)
@@ -59,7 +59,13 @@ class LoginActivity : AppCompatActivity() {
                 binding.passwordEditTextLayout.error = null
             }
 
-            if ((validateEmailText) && (validatePasswordText)) {
+            if (!statePasswordText){
+                binding.passwordEditTextLayout.error = getString(R.string.error)
+            } else{
+                binding.passwordEditTextLayout.error = null
+            }
+
+            if ((validateEmailText) && (statePasswordText)) {
                 successValidate()
             } else{
                 Toast.makeText(this, "gagal", Toast.LENGTH_SHORT ).show()
@@ -79,17 +85,17 @@ class LoginActivity : AppCompatActivity() {
                 validateEmailText = true
             }
         }
-        binding.passwordEditText.doOnTextChanged { text, start, before, count ->
-            if (text!!.length < 8) {
-                binding.passwordEditTextLayout.error = getString(R.string.error)
-                validatePasswordText = false
-            } else {
-                binding.passwordEditTextLayout.error = null
-                validatePasswordText = true
-//                Toast.makeText(this, validatePasswordText.toString(), Toast.LENGTH_SHORT ).show()
-
-            }
-        }
+//        binding.passwordEditText.doOnTextChanged { text, start, before, count ->
+//            if (text!!.length < 8) {
+//                binding.passwordEditTextLayout.error = getString(R.string.error)
+//                validatePasswordText = false
+//            } else {
+//                binding.passwordEditTextLayout.error = null
+//                validatePasswordText = true
+////                Toast.makeText(this, validatePasswordText.toString(), Toast.LENGTH_SHORT ).show()
+//
+//            }
+//        }
     }
 
 
