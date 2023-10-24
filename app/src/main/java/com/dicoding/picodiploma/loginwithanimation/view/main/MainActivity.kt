@@ -1,31 +1,29 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.ResultState
+import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
-import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
-import com.dicoding.picodiploma.loginwithanimation.databinding.ItemRowStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.addStory.AddStoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStory
@@ -33,9 +31,11 @@ import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStoryA
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
+
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +47,15 @@ class MainActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
+            } else{
+                setupView()
+                setListStory(user.token)
+                fabOnClick()
+                swipeRefreshLayout(user.token)
+                Log.d(TAG, "Token saved: ${user.token}")
             }
         }
 
-        setupView()
-        setListStory()
-        fabOnClick()
-        swipeRefreshLayout()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -84,8 +86,8 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.show()
     }
 
-    private fun setListStory() {
-        viewModel.getStories().observe(this) { result ->
+    private fun setListStory(token: String) {
+        viewModel.getStories(token).observe(this) { result ->
             if (result != null) {
                 when (result) {
                     is ResultState.Loading -> {
@@ -124,7 +126,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun showToast(message: String) {
+    private fun showToast(message: String?) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -154,13 +156,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun swipeRefreshLayout(){
+    private fun swipeRefreshLayout(token: String){
         binding.swipeRefresh.setOnRefreshListener( object: SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 binding.swipeRefresh.isRefreshing = true
                 Handler(Looper.getMainLooper()).postDelayed({
                     binding.swipeRefresh.isRefreshing = false
-                    setListStory()
+                    setListStory(token)
                 }, 1000)
             }
 

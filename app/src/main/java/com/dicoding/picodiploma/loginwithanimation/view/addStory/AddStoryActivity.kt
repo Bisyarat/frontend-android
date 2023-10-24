@@ -21,6 +21,7 @@ import com.dicoding.picodiploma.loginwithanimation.utils.uriToFile
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.login.LoginViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
+import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -55,8 +56,15 @@ class AddStoryActivity : AppCompatActivity() {
         }
 
         binding.uploadButton.setOnClickListener {
-            showToast("Upload Data!!")
-            uploadImage()
+            viewModel.getSession().observe(this) { user ->
+                if (user.token.isNotEmpty()) {
+                    val token = user.token
+                    uploadImage(token)
+                    showToast("Upload Data!!")
+                } else{
+                    showToast("Gagal Upload Data!! token tidak ada")
+                }
+            }
         }
 
     }
@@ -70,7 +78,7 @@ class AddStoryActivity : AppCompatActivity() {
         launcherIntentCamera.launch(currentImageUri)
     }
 
-    private fun uploadImage(){
+    private fun uploadImage(token: String){
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
             Log.d("Image File", "showImage: ${imageFile.path}")
@@ -86,7 +94,7 @@ class AddStoryActivity : AppCompatActivity() {
             )
 
             lifecycleScope.launch {
-                viewModel.addNewStory(multipartBody, requestBody).observe(this@AddStoryActivity){ result ->
+                viewModel.addNewStory(token,multipartBody, requestBody).observe(this@AddStoryActivity){ result ->
                     if (result != null) {
                         when (result) {
                             is ResultState.Loading -> {

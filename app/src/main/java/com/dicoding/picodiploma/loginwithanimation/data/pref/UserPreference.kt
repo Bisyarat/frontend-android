@@ -1,6 +1,8 @@
 package com.dicoding.picodiploma.loginwithanimation.data.pref
 
+import android.content.ContentValues
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -19,6 +21,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[EMAIL_KEY] = user.email!!
             preferences[TOKEN_KEY] = user.token!!
             preferences[IS_LOGIN_KEY] = true
+            Log.d(ContentValues.TAG, "Token: ${preferences[TOKEN_KEY]}")
         }
     }
 

@@ -31,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     var validateEmailText = false
-    var validatePasswordText = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             val emailText = binding.emailEditText.text.toString()
             val passwordText = binding.passwordEditText.text.toString()
+            val statePasswordText = if (passwordText.length < 8) false else true
 
             if (emailText.length === 0) {
                 binding.emailEditTextLayout.error = getString(R.string.errorEmptyField)
@@ -59,7 +59,13 @@ class LoginActivity : AppCompatActivity() {
                 binding.passwordEditTextLayout.error = null
             }
 
-            if ((validateEmailText) && (validatePasswordText)) {
+            if (!statePasswordText){
+                binding.passwordEditTextLayout.error = getString(R.string.error)
+            } else{
+                binding.passwordEditTextLayout.error = null
+            }
+
+            if ((validateEmailText) && (statePasswordText)) {
                 successValidate()
             } else{
                 Toast.makeText(this, "gagal", Toast.LENGTH_SHORT ).show()
@@ -77,17 +83,6 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 binding.emailEditTextLayout.error = null
                 validateEmailText = true
-            }
-        }
-        binding.passwordEditText.doOnTextChanged { text, start, before, count ->
-            if (text!!.length < 8) {
-                binding.passwordEditTextLayout.error = getString(R.string.error)
-                validatePasswordText = false
-            } else {
-                binding.passwordEditTextLayout.error = null
-                validatePasswordText = true
-//                Toast.makeText(this, validatePasswordText.toString(), Toast.LENGTH_SHORT ).show()
-
             }
         }
     }
@@ -113,10 +108,10 @@ class LoginActivity : AppCompatActivity() {
         checkLoginFromApi(email, password)
     }
 
-    private fun alertBerhasil(message: String){
+    private fun alertBerhasil(){
         AlertDialog.Builder(this).apply {
             setTitle("Yeah!")
-            setMessage("[$message]Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+            setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
             setPositiveButton("Lanjut") { _, _ ->
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -130,7 +125,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkLoginFromApi(email: String, password: String) : Boolean{
         var dataAvailable: Boolean = false
-        viewModel.login(UserModel(email, null, false, null, password)).observe(this) { result ->
+        viewModel.login(UserModel(email, "", false, null, password)).observe(this) { result ->
             run {
                 if (result != null) {
                     when (result) {
@@ -140,12 +135,12 @@ class LoginActivity : AppCompatActivity() {
                         }
                         is ResultState.Success -> {
                             val message = result.data.message!!
-                            val token = result.data.loginResult?.token
+                            val token = result.data.loginResult.token
 
                             showToast(message)
                             showLoading(false)
                             viewModel.saveSession(UserModel(email, token))
-                            alertBerhasil(message)
+                            alertBerhasil()
                             dataAvailable = true
                         }
 

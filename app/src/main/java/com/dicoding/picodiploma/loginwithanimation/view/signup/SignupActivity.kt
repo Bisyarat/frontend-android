@@ -69,15 +69,6 @@ class SignupActivity : AppCompatActivity() {
                 validateEmailText = true
             }
         }
-        binding.passwordEditText.doOnTextChanged { text, start, before, count ->
-            if (text!!.length < 8) {
-                binding.passwordEditTextLayout.error = getString(R.string.error)
-                validatePasswordText = false
-            } else {
-                binding.passwordEditTextLayout.error = null
-                validatePasswordText = true
-            }
-        }
     }
 
     private fun successValidate() {
@@ -85,7 +76,7 @@ class SignupActivity : AppCompatActivity() {
         val name = binding.nameEditText.text.toString()
         val password = binding.passwordEditText.text.toString()
 
-        viewModel.register(UserModel(email, null, false, name, password)).observe(this) { result ->
+        viewModel.register(UserModel(email, "", false, name, password)).observe(this) { result ->
             run {
                 if (result != null) {
                     when (result) {
@@ -113,6 +104,7 @@ class SignupActivity : AppCompatActivity() {
         val nameText = binding.nameEditText.text.toString()
         val emailText = binding.emailEditText.text.toString()
         val passwordText = binding.passwordEditText.text.toString()
+        validatePasswordText = if (passwordText.length < 8) false else true
 
         if (nameText.length === 0) {
             binding.nameEditTextLayout.error = getString(R.string.errorEmptyField)
@@ -131,6 +123,12 @@ class SignupActivity : AppCompatActivity() {
         if (passwordText.length === 0) {
             binding.passwordEditTextLayout.error = getString(R.string.errorEmptyField)
         } else {
+            binding.passwordEditTextLayout.error = null
+        }
+
+        if (!validatePasswordText){
+            binding.passwordEditTextLayout.error = getString(R.string.error)
+        } else{
             binding.passwordEditTextLayout.error = null
         }
 
