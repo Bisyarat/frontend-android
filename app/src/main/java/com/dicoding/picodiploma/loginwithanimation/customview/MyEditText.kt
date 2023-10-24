@@ -34,7 +34,7 @@ class MyEditText : TextInputEditText {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().isNotEmpty() && s.length <= 8) {
+                if (s.toString().isNotEmpty() && s.length < 8) {
                     error = "Password tidak boleh kurang dari 8 karakter"
                 } else {
                     error = null

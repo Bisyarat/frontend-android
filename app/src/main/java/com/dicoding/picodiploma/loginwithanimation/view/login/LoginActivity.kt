@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             val emailText = binding.emailEditText.text.toString()
             val passwordText = binding.passwordEditText.text.toString()
-            val statePasswordText = if (passwordText.length <= 8) false else true
+            val statePasswordText = if (passwordText.length < 8) false else true
 
             if (emailText.length === 0) {
                 binding.emailEditTextLayout.error = getString(R.string.errorEmptyField)
@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
         checkLoginFromApi(email, password)
     }
 
-    private fun alertBerhasil(message: String){
+    private fun alertBerhasil(){
         AlertDialog.Builder(this).apply {
             setTitle("Yeah!")
             setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
@@ -125,7 +125,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkLoginFromApi(email: String, password: String) : Boolean{
         var dataAvailable: Boolean = false
-        viewModel.login(UserModel(email, null, false, null, password)).observe(this) { result ->
+        viewModel.login(UserModel(email, "", false, null, password)).observe(this) { result ->
             run {
                 if (result != null) {
                     when (result) {
@@ -135,12 +135,12 @@ class LoginActivity : AppCompatActivity() {
                         }
                         is ResultState.Success -> {
                             val message = result.data.message!!
-                            val token = result.data.loginResult?.token
+                            val token = result.data.loginResult.token
 
                             showToast(message)
                             showLoading(false)
                             viewModel.saveSession(UserModel(email, token))
-                            alertBerhasil(message)
+                            alertBerhasil()
                             dataAvailable = true
                         }
 
