@@ -24,5 +24,7 @@
     <string name="upload">Upload</string>
     <string name="ketik_des">description</string>
     <string name="empty_image_warning">Tidak ada gambar!</string>
+    <string name="map">Map</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>

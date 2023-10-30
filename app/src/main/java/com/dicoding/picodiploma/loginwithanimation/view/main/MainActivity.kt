@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            R.id.action_map ->  {
+                showToast("Tes Map")
+            }
             R.id.action_logout ->  {
                 viewModel.logout()
             }
