@@ -1,8 +1,16 @@
 package com.dicoding.picodiploma.loginwithanimation.view.map
 
+import android.content.ContentValues
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.viewModels
 import com.dicoding.picodiploma.loginwithanimation.R
+import com.dicoding.picodiploma.loginwithanimation.data.ResultState
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -11,11 +19,20 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMapsBinding
+import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
+import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
+import com.google.android.gms.maps.model.LatLngBounds
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private val viewModel by viewModels<MapViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
+
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private val boundsBuilder = LatLngBounds.Builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +60,57 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        addManyMarker()
+    }
+
+    private fun addManyMarker() {
+        var token: String? = null
+        viewModel.getSession().observe(this) { user ->
+            if (!user.isLogin) {
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+            } else{
+                token = user.token
+                viewModel.getStoriesWithLocation(token!!).observe(this){ result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showToast("Loading")
+                            }
+                            is ResultState.Success -> {
+                                showToast("Berhasil Update Location")
+
+                                result.data.listStory.forEach { it ->
+                                    val latLng = LatLng(it.lat!!, it.lon!!)
+                                    mMap.addMarker(MarkerOptions().position(latLng).title(it.name))
+                                    boundsBuilder.include(latLng)
+                                }
+
+                                val bounds: LatLngBounds = boundsBuilder.build()
+                                mMap.animateCamera(
+                                    CameraUpdateFactory.newLatLngBounds(
+                                        bounds,
+                                        resources.displayMetrics.widthPixels,
+                                        resources.displayMetrics.heightPixels,
+                                        300
+                                    )
+                                )
+                            }
+
+                            is ResultState.Error -> {
+                                showToast(result.error)
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    private fun showToast(message: String?) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,0 +1,14 @@
+package com.dicoding.picodiploma.loginwithanimation.view.map
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
+import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
+
+class MapViewModel(private val repository: UserRepository) : ViewModel() {
+    fun getSession(): LiveData<UserModel> {
+        return repository.getSession().asLiveData()
+    }
+    fun getStoriesWithLocation(token: String) = repository.getStoriesWithLocation(token)
+}
