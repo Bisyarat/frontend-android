@@ -84,17 +84,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 showToast("Berhasil Update Location")
 
                                 result.data.listStory.forEach { it ->
-                                    val latLng = LatLng(it.lat!!, it.lon!!)
-                                    boundsBuilder.include(latLng)
+                                    var latLng = LatLng(it.lat!!, it.lon!!)
                                     mMap.addMarker(
                                         MarkerOptions()
                                             .position(latLng)
                                             .title(it.name)
                                             .snippet(it.description)
                                     )
+                                    boundsBuilder.include(latLng)
                                 }
 
                                 val bounds: LatLngBounds = boundsBuilder.build()
+
                                 mMap.animateCamera(
                                     CameraUpdateFactory.newLatLngBounds(
                                         bounds,
