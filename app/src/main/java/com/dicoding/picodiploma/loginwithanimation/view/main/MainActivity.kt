@@ -28,6 +28,7 @@ import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.addStory.AddStoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStory
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStoryActivity
+import com.dicoding.picodiploma.loginwithanimation.view.map.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -65,6 +66,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            R.id.action_map ->  {
+                showToast("Menjalankan Map")
+                val intent = Intent(this@MainActivity, MapsActivity::class.java)
+                startActivity(intent)
+            }
             R.id.action_logout ->  {
                 viewModel.logout()
             }
