@@ -71,20 +71,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            } else{
+            } else {
                 token = user.token
-                viewModel.getStoriesWithLocation(token!!).observe(this){ result ->
+                viewModel.getStoriesWithLocation(token!!).observe(this) { result ->
                     if (result != null) {
                         when (result) {
                             is ResultState.Loading -> {
                                 showToast("Loading")
                             }
+
                             is ResultState.Success -> {
                                 showToast("Berhasil Update Location")
 
                                 result.data.listStory.forEach { it ->
                                     val latLng = LatLng(it.lat!!, it.lon!!)
-                                    mMap.addMarker(MarkerOptions().position(latLng).title(it.name))
+                                    mMap.addMarker(
+                                        MarkerOptions()
+                                            .position(latLng)
+                                            .title(it.name)
+                                            .snippet(it.description)
+                                    )
                                     boundsBuilder.include(latLng)
                                 }
 

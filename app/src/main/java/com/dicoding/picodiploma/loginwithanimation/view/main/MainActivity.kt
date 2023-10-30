@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -51,7 +52,8 @@ class MainActivity : AppCompatActivity() {
                 finish()
             } else{
                 setupView()
-                setListStory(user.token)
+//                setListStory(user.token)
+                setAdapterListStories(user.token)
                 fabOnClick()
                 swipeRefreshLayout(user.token)
                 Log.d(TAG, "Token saved: ${user.token}")
@@ -93,43 +95,44 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.show()
     }
 
-    private fun setListStory(token: String) {
-        viewModel.getStories(token).observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultState.Loading -> {
-                        showLoading(true)
-                    }
-                    is ResultState.Success -> {
-                        showToast("Berhasil Update Story")
-                        setAdapterListStories(result.data.listStory)
-                        showLoading(false)
-                    }
+//    private fun setListStory(token: String) {
+//        viewModel.getStories(token).observe(this) { result ->
+//            if (result != null) {
+//                when (result) {
+//                    is ResultState.Loading -> {
+//                        showLoading(true)
+//                    }
+//                    is ResultState.Success -> {
+//                        showToast("Berhasil Update Story")
+//                        setAdapterListStories(result.data.listStory)
+//                        showLoading(false)
+//                    }
+//
+//                    is ResultState.Error -> {
+//                        showToast(result.error)
+//                        showLoading(false)
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-                    is ResultState.Error -> {
-                        showToast(result.error)
-                        showLoading(false)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setAdapterListStories(listItem: List<ListStoryItem>){
+    private fun setAdapterListStories(token: String){
         val layoutManager = LinearLayoutManager(this)
         binding.rvStories.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStories.addItemDecoration(itemDecoration)
 
         val adapter = StoryAdapter()
-        adapter.submitList(listItem)
         binding.rvStories.adapter = adapter
+        viewModel.getQuote(token).observe(this){
+            adapter.submitData(lifecycle, it)
+        }
 
         StoryAdapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
             override fun onItemClicked(item: ListStoryItem) {
                 showSelectedStory(item)
             }
-
         })
     }
 
@@ -169,7 +172,8 @@ class MainActivity : AppCompatActivity() {
                 binding.swipeRefresh.isRefreshing = true
                 Handler(Looper.getMainLooper()).postDelayed({
                     binding.swipeRefresh.isRefreshing = false
-                    setListStory(token)
+//                    setListStory(token)
+                    setAdapterListStories(token)
                 }, 1000)
             }
 
