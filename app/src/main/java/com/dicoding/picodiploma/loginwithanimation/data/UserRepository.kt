@@ -58,6 +58,18 @@ class UserRepository private constructor(
         }
     }
 
+    fun getStoriesWithLocation(token: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getStoriesWithLocation("Bearer " + token)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, StoryResponse::class.java)
+            emit(ResultState.Error(errorResponse.message!!))
+        }
+    }
+
     fun addNewStory(token: String, file: MultipartBody.Part, description: RequestBody) = liveData {
         emit(ResultState.Loading)
         try {
