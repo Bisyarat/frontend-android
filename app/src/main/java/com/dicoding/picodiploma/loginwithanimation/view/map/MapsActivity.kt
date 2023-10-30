@@ -22,6 +22,7 @@ import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMapsBindi
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
+import com.google.android.gms.maps.model.LatLngBounds
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -31,6 +32,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private val boundsBuilder = LatLngBounds.Builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +60,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        addManyMarker()
     }
 
     private fun addManyMarker() {
@@ -70,32 +73,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 finish()
             } else{
                 token = user.token
-            }
-        }
+                viewModel.getStoriesWithLocation(token!!).observe(this){ result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showToast("Loading")
+                            }
+                            is ResultState.Success -> {
+                                showToast("Berhasil Update Location")
 
-        viewModel.getStoriesWithLocation(token!!).observe(this){ result ->
-            if (result != null) {
-                when (result) {
-                    is ResultState.Loading -> {
-                    }
-                    is ResultState.Success -> {
-                        showToast("Berhasil Update Story")
+                                result.data.listStory.forEach { it ->
+                                    val latLng = LatLng(it.lat!!, it.lon!!)
+                                    mMap.addMarker(MarkerOptions().position(latLng).title(it.name))
+                                    boundsBuilder.include(latLng)
+                                }
 
-                        result.data.listStory.forEach { it ->
-                            val latLng = LatLng(it.lat!!, it.lon!!)
-                            mMap.addMarker(MarkerOptions().position(latLng).title(it.name))
+                                val bounds: LatLngBounds = boundsBuilder.build()
+                                mMap.animateCamera(
+                                    CameraUpdateFactory.newLatLngBounds(
+                                        bounds,
+                                        resources.displayMetrics.widthPixels,
+                                        resources.displayMetrics.heightPixels,
+                                        300
+                                    )
+                                )
+                            }
+
+                            is ResultState.Error -> {
+                                showToast(result.error)
+                            }
                         }
                     }
 
-                    is ResultState.Error -> {
-                        showToast(result.error)
-                    }
                 }
             }
-
         }
-
-
     }
 
     private fun showToast(message: String?) {
