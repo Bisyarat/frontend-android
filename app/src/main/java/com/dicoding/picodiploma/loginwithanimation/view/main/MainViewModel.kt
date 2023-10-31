@@ -22,8 +22,8 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun getStories(token: String) = repository.getStories(token)
+//    fun getStories(token: String) = repository.getStories(token)
 
-    fun getQuote(token: String): LiveData<PagingData<ListStoryItem>> =
-        repository.getQuote(token).cachedIn(viewModelScope)
+    fun getStories(token: String): LiveData<PagingData<ListStoryItem>> =
+        repository.getStories(token).cachedIn(viewModelScope)
 }

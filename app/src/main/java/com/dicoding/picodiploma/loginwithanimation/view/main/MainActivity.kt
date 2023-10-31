@@ -33,6 +33,7 @@ import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStory
 import com.dicoding.picodiploma.loginwithanimation.view.detailStory.DetailStoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.map.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 
@@ -130,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                 adapter.retry()
             }
         )
-        viewModel.getQuote(token).observe(this){
+        viewModel.getStories(token).observe(this){
             adapter.submitData(lifecycle, it)
         }
 
@@ -179,6 +180,7 @@ class MainActivity : AppCompatActivity() {
                     binding.swipeRefresh.isRefreshing = false
 //                    setListStory(token)
                     setAdapterListStories(token)
+                    Log.d(TAG, "Token : $token")
                 }, 1000)
             }
 
