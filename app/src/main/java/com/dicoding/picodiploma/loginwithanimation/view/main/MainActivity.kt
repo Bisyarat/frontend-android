@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dicoding.picodiploma.loginwithanimation.R
+import com.dicoding.picodiploma.loginwithanimation.adapter.LoadingStateAdapter
 import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
@@ -124,7 +125,11 @@ class MainActivity : AppCompatActivity() {
         binding.rvStories.addItemDecoration(itemDecoration)
 
         val adapter = StoryAdapter()
-        binding.rvStories.adapter = adapter
+        binding.rvStories.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
         viewModel.getQuote(token).observe(this){
             adapter.submitData(lifecycle, it)
         }
