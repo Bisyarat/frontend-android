@@ -22,18 +22,20 @@ interface ApiService {
         @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String
-    ) : RegisterResponse
+    ): RegisterResponse
 
     @FormUrlEncoded
     @POST("login")
     suspend fun login(
         @Field("email") email: String,
         @Field("password") password: String
-    ) : LoginResponse
+    ): LoginResponse
 
     @GET("stories")
     suspend fun getStories(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("page") page: Int = 1,
+        @Query("size") size: Int = 20
     ): StoryResponse
 
     @Multipart
@@ -47,6 +49,6 @@ interface ApiService {
     @GET("stories")
     suspend fun getStoriesWithLocation(
         @Header("Authorization") token: String,
-        @Query("location") location : Int = 1,
+        @Query("location") location: Int = 1,
     ): StoryResponse
 }

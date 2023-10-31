@@ -2,9 +2,15 @@ package com.dicoding.picodiploma.loginwithanimation.data
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
@@ -56,6 +62,17 @@ class UserRepository private constructor(
             val errorResponse = Gson().fromJson(errorBody, StoryResponse::class.java)
             emit(ResultState.Error(errorResponse.message!!))
         }
+    }
+
+    fun getQuote(token: String): LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                QuotePagingSource(apiService, "Bearer " + token)
+            }
+        ).liveData
     }
 
     fun getStoriesWithLocation(token: String) = liveData {
