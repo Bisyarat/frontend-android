@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                 adapter.retry()
             }
         )
-        viewModel.getQuote(token).observe(this){
+        viewModel.getStories(token).observe(this){
             adapter.submitData(lifecycle, it)
         }
 
