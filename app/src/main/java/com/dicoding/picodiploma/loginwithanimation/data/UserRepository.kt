@@ -52,25 +52,25 @@ class UserRepository private constructor(
         }
     }
 
-    fun getStories(token: String) = liveData {
-        emit(ResultState.Loading)
-        try {
-            val successResponse = apiService.getStories("Bearer " + token)
-            emit(ResultState.Success(successResponse))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, StoryResponse::class.java)
-            emit(ResultState.Error(errorResponse.message!!))
-        }
-    }
+//    fun getStories(token: String) = liveData {
+//        emit(ResultState.Loading)
+//        try {
+//            val successResponse = apiService.getStories("Bearer " + token)
+//            emit(ResultState.Success(successResponse))
+//        } catch (e: HttpException) {
+//            val errorBody = e.response()?.errorBody()?.string()
+//            val errorResponse = Gson().fromJson(errorBody, StoryResponse::class.java)
+//            emit(ResultState.Error(errorResponse.message!!))
+//        }
+//    }
 
-    fun getQuote(token: String): LiveData<PagingData<ListStoryItem>> {
+    fun getStories(token: String): LiveData<PagingData<ListStoryItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
             pagingSourceFactory = {
-                QuotePagingSource(apiService, "Bearer " + token)
+                StoryPagingSource(apiService, "Bearer " + token)
             }
         ).liveData
     }
