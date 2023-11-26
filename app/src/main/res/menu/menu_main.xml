@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:menuCategory="container">
         <item
-            android:id="@+id/action_map"
-            android:icon="@drawable/baseline_map_24ic_map"
-            android:title="@string/map"
-            app:showAsAction="always"/>
-        <item
             android:id="@+id/action_logout"
             android:title="@string/logout"
             app:showAsAction="never"/>
