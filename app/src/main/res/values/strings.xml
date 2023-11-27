@@ -4,7 +4,7 @@
     <string name="login">Masuk</string>
     <string name="message_welcome_page">Mau belajar Bahasa Isyarat? Di Bisyarat aja!</string>
     <string name="title_welcome_page">Selamat datang di Bisyarat!</string>
-    <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
+    <string name="title_signup_page">Lengkapi data dirimu dulu ya</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="message_login_page">Masukkan dulu datamu ya</string>
@@ -28,5 +28,6 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="retry">Retry</string>
     <string name="email_atau_username">Email atau Username</string>
+    <string name="username">Username</string>
 
 </resources>
