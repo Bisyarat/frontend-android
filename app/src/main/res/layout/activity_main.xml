@@ -7,6 +7,7 @@
     tools:context=".view.main.MainActivity">
 
     <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
@@ -23,7 +24,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bottom_navigation_menu"
+        style="@style/Widget.App.BottomNavigationView"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
