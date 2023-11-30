@@ -16,6 +16,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +32,8 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryRes
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.addStory.AddStoryActivity
+import com.dicoding.picodiploma.loginwithanimation.view.home.HomeFragment
+import com.dicoding.picodiploma.loginwithanimation.view.profile.ProfileFragment
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import kotlin.math.log
 
@@ -83,5 +88,30 @@ class MainActivity : AppCompatActivity() {
             )
         }
         supportActionBar?.show()
+
+        val homeFragment = HomeFragment.newInstance("param1", "param2")
+        val profileFragment = ProfileFragment.newInstance("param1", "param2")
+        replacedFragment(homeFragment)
+
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.home_menu -> {
+                    replacedFragment(homeFragment)
+                    true
+                }
+                R.id.profile_menu -> {
+                    replacedFragment(profileFragment)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun replacedFragment(fragment: Fragment){
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.commit()
     }
 }
