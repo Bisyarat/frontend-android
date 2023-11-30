@@ -32,9 +32,10 @@ class SignCategoryAdapter : ListAdapter<SignCategory, SignCategoryAdapter.MyView
             binding.tvTitleCategory.text = signCategory.titleCategory
             binding.tvProgressCategory.text = "Selesai ${signCategory.progressCategory}%"
             binding.idLinearIndicator.progress = signCategory.progressCategory
-            Glide.with(itemView.context)
-                .load(signCategory.photoUrl)
-                .into(binding.imgItemPhoto)
+//            Glide.with(itemView.context)
+//                .load(signCategory.photoUrl)
+//                .into(binding.imgItemPhoto)
+            binding.imgItemPhoto.setImageResource(signCategory.idPhoto)
         }
     }
     companion object {
