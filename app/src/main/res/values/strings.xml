@@ -37,5 +37,8 @@
     <string name="judul_card_home">Perkembangan Kursus</string>
     <string name="description_card_home">Progres Kamu Sudah Berjalan 60%, Semangat!</string>
     <string name="kursus_saya">Kursus Saya</string>
+    <string name="course_category">Course Category</string>
+    <string name="belajar_huruf">Belajar Huruf</string>
+    <string name="selesai_30">Selesai 30%</string>
 
 </resources>

@@ -138,7 +138,7 @@
                       app:layout_constraintStart_toEndOf="@+id/circularProgressIndicator"
                       app:layout_constraintTop_toTopOf="parent"
                       android:textStyle="bold"
-                      android:textSize="16dp"
+                      android:textSize="16sp"
                       android:layout_marginTop="10dp"/>
 
                   <TextView
@@ -150,7 +150,7 @@
                       app:layout_constraintEnd_toEndOf="parent"
                       app:layout_constraintStart_toEndOf="@+id/circularProgressIndicator"
                       app:layout_constraintTop_toBottomOf="@+id/textView2"
-                      android:textSize="15dp"
+                      android:textSize="15sp"
                       android:layout_marginBottom="10dp"/>
 
               </androidx.constraintlayout.widget.ConstraintLayout>
