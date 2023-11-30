@@ -71,4 +71,6 @@ dependencies {
     testImplementation("org.mockito:mockito-core:3.12.4")
     testImplementation("org.mockito:mockito-inline:3.12.4")
 
+    implementation ("androidx.fragment:fragment-ktx:1.3.6")
+
 }

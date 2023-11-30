@@ -5,7 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.R
+import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
+import com.dicoding.picodiploma.loginwithanimation.databinding.FragmentHomeBinding
+import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,6 +29,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
+    private val signCategoryViewModel: SignCategoryViewModel by activityViewModels() {
+        ViewModelFactory.getInstance(requireActivity())
+    }
+
+
+    private lateinit var binding: FragmentHomeBinding
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,7 +52,21 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return  binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val layoutManager = LinearLayoutManager(requireActivity())
+        binding.rvCategory.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
+        binding.rvCategory.addItemDecoration(itemDecoration)
+
+        //set recycler view
+        val listCourseSignCategory = signCategoryViewModel.getListCourseSignCategory()
+        setSignCategoryData(listCourseSignCategory)
     }
 
     companion object {
@@ -58,4 +89,11 @@ class HomeFragment : Fragment() {
                 }
             }
     }
+
+    private fun setSignCategoryData(signCategory: List<SignCategory>) {
+        val adapter = SignCategoryAdapter()
+        adapter.submitList(signCategory)
+        binding.rvCategory.adapter = adapter
+    }
+
 }
