@@ -1,6 +1,7 @@
 package com.dicoding.picodiploma.loginwithanimation.di
 
 import android.content.Context
+import com.dicoding.picodiploma.loginwithanimation.data.SignCategoryRepository
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
 import com.dicoding.picodiploma.loginwithanimation.data.pref.dataStore
@@ -15,5 +16,9 @@ object Injection {
 //        val apiService = ApiConfig.getApiService(user.token)
         val apiService = ApiConfig.getApiService()
         return UserRepository.getInstance(pref, apiService)
+    }
+
+    fun provideSignCategoryRepository(): SignCategoryRepository {
+        return SignCategoryRepository.getInstance()
     }
 }

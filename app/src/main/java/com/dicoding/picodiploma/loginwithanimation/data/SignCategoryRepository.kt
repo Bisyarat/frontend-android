@@ -16,4 +16,13 @@ class SignCategoryRepository {
     fun getListCourseSignCategory() : List<SignCategory> {
         return signCategory
     }
+
+    companion object {
+        @Volatile
+        private var instance: SignCategoryRepository? = null
+        fun getInstance(): SignCategoryRepository =
+            instance ?: synchronized(this) {
+                instance ?: SignCategoryRepository()
+            }.also { instance = it }
+    }
 }
