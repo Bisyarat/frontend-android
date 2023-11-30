@@ -58,6 +58,7 @@
                 tools:text="@string/selesai_30"/>
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/id_linear_indicator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"

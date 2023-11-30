@@ -32,7 +32,7 @@
                 app:layout_constraintVertical_bias="0.16" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -53,7 +53,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginLeft="20dp"
                 android:textColor="@color/onWhite"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/tv_username"
                 app:layout_constraintVertical_bias="0.12" />
 
             <ImageView
@@ -108,14 +108,14 @@
                       android:textColor="@color/black"
                       android:textSize="18sp"
                       android:textStyle="bold"
-                      app:layout_constraintStart_toStartOf="@id/circularProgressIndicator"
-                      app:layout_constraintBottom_toBottomOf="@+id/circularProgressIndicator"
-                      app:layout_constraintEnd_toEndOf="@+id/circularProgressIndicator"
-                      app:layout_constraintTop_toTopOf="@+id/circularProgressIndicator" />
+                      app:layout_constraintStart_toStartOf="@id/circular_progress_indicator"
+                      app:layout_constraintBottom_toBottomOf="@+id/circular_progress_indicator"
+                      app:layout_constraintEnd_toEndOf="@+id/circular_progress_indicator"
+                      app:layout_constraintTop_toTopOf="@+id/circular_progress_indicator" />
 
 
                   <com.google.android.material.progressindicator.CircularProgressIndicator
-                      android:id="@+id/circularProgressIndicator"
+                      android:id="@+id/circular_progress_indicator"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       app:indicatorSize="60dp"
@@ -134,21 +134,21 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:text="@string/judul_card_home"
-                      app:layout_constraintBottom_toTopOf="@+id/textView3"
-                      app:layout_constraintStart_toEndOf="@+id/circularProgressIndicator"
+                      app:layout_constraintBottom_toTopOf="@+id/tv_welcome_progress"
+                      app:layout_constraintStart_toEndOf="@+id/circular_progress_indicator"
                       app:layout_constraintTop_toTopOf="parent"
                       android:textStyle="bold"
                       android:textSize="16sp"
                       android:layout_marginTop="10dp"/>
 
                   <TextView
-                      android:id="@+id/textView3"
+                      android:id="@+id/tv_welcome_progress"
                       android:layout_width="0dp"
                       android:layout_height="wrap_content"
                       android:text="@string/description_card_home"
                       app:layout_constraintBottom_toBottomOf="parent"
                       app:layout_constraintEnd_toEndOf="parent"
-                      app:layout_constraintStart_toEndOf="@+id/circularProgressIndicator"
+                      app:layout_constraintStart_toEndOf="@+id/circular_progress_indicator"
                       app:layout_constraintTop_toBottomOf="@+id/textView2"
                       android:textSize="15sp"
                       android:layout_marginBottom="10dp"/>
@@ -158,6 +158,7 @@
           </androidx.cardview.widget.CardView>
 
           <TextView
+              android:id="@+id/kursus_saya"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginStart="20dp"
@@ -166,13 +167,10 @@
               android:textStyle="bold"/>
 
           <androidx.recyclerview.widget.RecyclerView
-              android:id="@+id/rv_heroes"
-              android:layout_width="0dp"
-              android:layout_height="0dp"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"/>
+              android:id="@+id/rv_category"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"/>
 
 
       </LinearLayout>
