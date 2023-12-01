@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.picodiploma.loginwithanimation.DetailSignWordCategoryActivity
 import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
 import com.dicoding.picodiploma.loginwithanimation.databinding.FragmentHomeBinding
@@ -106,6 +107,9 @@ class HomeFragment : Fragment() {
 
     private fun showSelectedCategory(signCategory: SignCategory){
         Toast.makeText(requireActivity(), "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
+
+        val intentWithStringData = Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
+        this.startActivity(intentWithStringData)
     }
 
 }
