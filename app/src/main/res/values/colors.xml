@@ -10,5 +10,6 @@
     <color name="primary">#3187B7</color>
     <color name="onPrimary">#97CCC6</color>
     <color name="onWhite">#FAFAFA</color>
+    <color name="gray">#636161</color>
 
 </resources>

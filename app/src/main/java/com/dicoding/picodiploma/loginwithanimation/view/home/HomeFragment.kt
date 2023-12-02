@@ -100,8 +100,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun showSelectedCategory(signCategory: SignCategory){
-        val intentWithStringData = Intent(activity, DetailSignWordCategoryActivity::class.java)
-        activity?.startActivity(intentWithStringData)
+        val intentWithStringData = Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
+        requireActivity().startActivity(intentWithStringData)
 
 //        Toast.makeText(requireActivity(), "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
 
