@@ -6,19 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.picodiploma.loginwithanimation.DetailSignWordCategoryActivity
-import com.dicoding.picodiploma.loginwithanimation.R
+import com.dicoding.picodiploma.loginwithanimation.view.DetailSignWordCategory.DetailSignWordCategoryActivity
 import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
 import com.dicoding.picodiploma.loginwithanimation.databinding.FragmentHomeBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
-import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -106,10 +100,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun showSelectedCategory(signCategory: SignCategory){
-        Toast.makeText(requireActivity(), "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
+        val intentWithStringData = Intent(activity, DetailSignWordCategoryActivity::class.java)
+        activity?.startActivity(intentWithStringData)
 
-        val intentWithStringData = Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
-        this.startActivity(intentWithStringData)
+//        Toast.makeText(requireActivity(), "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
+
+
     }
 
 }

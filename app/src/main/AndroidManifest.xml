@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginWithAnimation">
         <activity
-            android:name=".DetailSignWordCategoryActivity"
+            android:name=".view.DetailSignWordCategory.DetailSignWordCategoryActivity"
             android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
