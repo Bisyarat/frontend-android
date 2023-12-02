@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dicoding.picodiploma.loginwithanimation.data.SignCategoryRepository
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.di.Injection
+import com.dicoding.picodiploma.loginwithanimation.view.DetailSignWordCategory.DetailSignWordCategoryViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.addStory.AddStoryViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.home.SignCategoryViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.login.LoginViewModel
@@ -31,6 +32,9 @@ class ViewModelFactory(private val repository: UserRepository, private val signC
             }
             modelClass.isAssignableFrom(SignCategoryViewModel::class.java) -> {
                 SignCategoryViewModel(signCategoryRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailSignWordCategoryViewModel::class.java) -> {
+                DetailSignWordCategoryViewModel(signCategoryRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
