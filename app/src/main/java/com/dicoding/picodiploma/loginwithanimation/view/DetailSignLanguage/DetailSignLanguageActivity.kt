@@ -1,22 +1,17 @@
-package com.dicoding.picodiploma.loginwithanimation.view.DetailSignWordCategory
+package com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
-import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityAddStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailSignWordCategoryBinding
-import com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage.DetailSignLanguageActivity
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
-import com.dicoding.picodiploma.loginwithanimation.view.home.SignCategoryViewModel
 
-class DetailSignWordCategoryActivity : AppCompatActivity() {
-    private val detailSignWordCategoryViewModel: DetailSignWordCategoryViewModel by viewModels() {
+class DetailSignLanguageActivity : AppCompatActivity() {
+    private val detailSignLanguageViewModel: DetailSignLanguageViewModel by viewModels() {
         ViewModelFactory.getInstance(this)
     }
 
@@ -36,10 +31,10 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
         binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
-        val listCourseSignCategory = detailSignWordCategoryViewModel.getListCourseSignCategory()
+        val listCourseSignCategory = detailSignLanguageViewModel.getListCourseSignCategory()
         setSignCategoryData(listCourseSignCategory)
 
-        DetailSignWordCategoryAdapter.setOnItemClickCallback(object: DetailSignWordCategoryAdapter.OnItemClickCallback{
+        DetailSignLanguageAdapter.setOnItemClickCallback(object: DetailSignLanguageAdapter.OnItemClickCallback{
             override fun onItemClicked(data: SignCategory) {
                 showSelected(data)
             }
@@ -48,15 +43,12 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
     }
 
     private fun setSignCategoryData(signCategory: List<SignCategory>) {
-        val adapter = DetailSignWordCategoryAdapter()
+        val adapter = DetailSignLanguageAdapter()
         adapter.submitList(signCategory)
         binding.rvCategory.adapter = adapter
     }
 
     private fun showSelected(signCategory: SignCategory){
-        val intent = Intent(this, DetailSignLanguageActivity::class.java)
-        this.startActivity(intent)
-
         Toast.makeText(this, "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
     }
 }
