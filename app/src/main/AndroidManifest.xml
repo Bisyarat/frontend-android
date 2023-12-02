@@ -17,6 +17,9 @@
         <activity
             android:name=".view.DetailSignWordCategory.DetailSignWordCategoryActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.DetailSignLanguage.DetailSignLanguageActivity"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
