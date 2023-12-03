@@ -32,8 +32,10 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvCategory.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-        binding.rvCategory.addItemDecoration(itemDecoration)
+
+        //hilangkan garis pemisah
+//        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+//        binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
         val listCourseSignCategory = detailSignWordCategoryViewModel.getListCourseSignCategory()

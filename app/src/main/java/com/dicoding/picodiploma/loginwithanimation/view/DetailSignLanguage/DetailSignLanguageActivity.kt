@@ -1,5 +1,6 @@
 package com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailSignWordCategoryBinding
+import com.dicoding.picodiploma.loginwithanimation.view.DetailExercise.DetailExerciseActivity
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 
 class DetailSignLanguageActivity : AppCompatActivity() {
@@ -27,8 +29,10 @@ class DetailSignLanguageActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvCategory.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-        binding.rvCategory.addItemDecoration(itemDecoration)
+
+        //hilangkan garis pemisah
+//        val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
+//        binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
         val listCourseSignCategory = detailSignLanguageViewModel.getListCourseSignCategory()
@@ -49,6 +53,9 @@ class DetailSignLanguageActivity : AppCompatActivity() {
     }
 
     private fun showSelected(signCategory: SignCategory){
+        val intent = Intent(this, DetailExerciseActivity::class.java)
+        this.startActivity(intent)
+
         Toast.makeText(this, "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
     }
 }
