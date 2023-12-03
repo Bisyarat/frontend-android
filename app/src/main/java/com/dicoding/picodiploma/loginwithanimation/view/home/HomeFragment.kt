@@ -58,8 +58,10 @@ class HomeFragment : Fragment() {
 
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvCategory.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
-        binding.rvCategory.addItemDecoration(itemDecoration)
+
+        //hilangkan garis pemisah
+//        val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
+//        binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
         val listCourseSignCategory = signCategoryViewModel.getListCourseSignCategory()
