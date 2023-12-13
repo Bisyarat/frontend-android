@@ -3,6 +3,9 @@ package com.dicoding.picodiploma.loginwithanimation.data.remote.response
 import com.google.gson.annotations.SerializedName
 
 data class FeedbackUserResponse(
+    @field:SerializedName("id")
+    val id: Int? = null,
+
     @field:SerializedName("keterangan")
     val keterangan: String? = null,
 
