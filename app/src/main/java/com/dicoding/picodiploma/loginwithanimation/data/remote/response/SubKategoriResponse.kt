@@ -2,7 +2,6 @@ package com.dicoding.picodiploma.loginwithanimation.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-
 data class SubKategoriResponse (
     @field:SerializedName("id")
     val id: Int? = null,
