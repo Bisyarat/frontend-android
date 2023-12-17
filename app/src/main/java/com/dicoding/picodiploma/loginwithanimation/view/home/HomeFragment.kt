@@ -17,6 +17,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListKategoriItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.FragmentHomeBinding
+import com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage.DetailSignLanguageActivity
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 
 
@@ -31,7 +32,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    val listGambar = listOf( R.drawable.angka_logo, R.drawable.abc_logo)
+    val listGambar = listOf(R.drawable.angka_logo, R.drawable.abc_logo)
 
     private val signCategoryViewModel: SignCategoryViewModel by activityViewModels() {
         ViewModelFactory.getInstance(requireActivity())
@@ -39,6 +40,7 @@ class HomeFragment : Fragment() {
 
 
     private lateinit var binding: FragmentHomeBinding
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -57,7 +59,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return  binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,13 +73,14 @@ class HomeFragment : Fragment() {
 //        binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
-        signCategoryViewModel.getAllKategori(param1!!).observe(viewLifecycleOwner){ result ->
+        signCategoryViewModel.getAllKategori(param1!!).observe(viewLifecycleOwner) { result ->
             run {
                 if (result != null) {
                     when (result) {
                         is ResultState.Loading -> {
                             showLoading(true)
                         }
+
                         is ResultState.Success -> {
                             val message = "Berhasil Ambil Data"
                             val listKategori = result.data.listKategori
@@ -101,7 +104,8 @@ class HomeFragment : Fragment() {
 //        setSignCategoryData(listCourseSignCategory)
         }
 
-        SignCategoryAdapter.setOnItemClickCallback(object: SignCategoryAdapter.OnItemClickCallback{
+        SignCategoryAdapter.setOnItemClickCallback(object :
+            SignCategoryAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SignCategory) {
                 showSelectedCategory(data)
             }
@@ -135,9 +139,16 @@ class HomeFragment : Fragment() {
         binding.rvCategory.adapter = adapter
     }
 
-    private fun showSelectedCategory(signCategory: SignCategory){
-        val intentWithStringData = Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
-        requireActivity().startActivity(intentWithStringData)
+    private fun showSelectedCategory(signCategory: SignCategory) {
+        if (signCategory.titleCategory == "Kata") {
+            val intentWithStringData =
+                Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
+            requireActivity().startActivity(intentWithStringData)
+        } else {
+            val intent = Intent(requireActivity(), DetailSignLanguageActivity::class.java)
+            requireActivity().startActivity(intent)
+        }
+
 
 //        Toast.makeText(requireActivity(), "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
     }
