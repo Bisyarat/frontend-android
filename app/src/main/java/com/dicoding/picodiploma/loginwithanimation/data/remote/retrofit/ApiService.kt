@@ -8,12 +8,14 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentU
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LogoutResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.SubKategoriResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -53,6 +55,11 @@ interface ApiService {
         @Query("nama_kategori") namaKategori: String? = null,
         @Query("nama_sub_kategori ") namaSubKategori: String? = null,
     ): KataResponse
+
+    @DELETE("api/users/logout")
+    suspend fun deleteLogoutUser(
+        @Header("Authorization") token: String,
+    ): LogoutResponse
 
     //hapus
     @GET("stories")

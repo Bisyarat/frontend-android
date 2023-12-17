@@ -22,4 +22,6 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
             repository.logout()
         }
     }
+
+    fun deleteLogoutUser(token: String) = repository.deleteLogoutUser(token)
 }

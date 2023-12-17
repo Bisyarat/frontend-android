@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val homeFragment = HomeFragment.newInstance(user.token!!, user.name!!)
-        val profileFragment = ProfileFragment.newInstance("param1", "param2")
+        val profileFragment = ProfileFragment.newInstance(user.token!!, "param2")
         replacedFragment(homeFragment)
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
