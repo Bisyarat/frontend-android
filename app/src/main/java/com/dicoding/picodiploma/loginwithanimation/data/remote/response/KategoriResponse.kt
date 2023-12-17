@@ -3,6 +3,7 @@ package com.dicoding.picodiploma.loginwithanimation.data.remote.response
 import com.google.gson.annotations.SerializedName
 
 data class KategoriResponse(
+    @field:SerializedName("data")
     val listKategori: List<ListKategoriItem> = emptyList(),
 )
 

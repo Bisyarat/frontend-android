@@ -11,6 +11,5 @@ object FakeSignCategoryDataSource {
         SignCategory(R.drawable.abc_logo,"", "Orange", 30),
         SignCategory(R.drawable.abc_logo,"", "Abu - abu", 30),
         SignCategory(R.drawable.abc_logo,"", "Coklat", 30),
-
     )
 }
