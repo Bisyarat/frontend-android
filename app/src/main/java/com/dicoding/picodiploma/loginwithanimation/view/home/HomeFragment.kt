@@ -148,6 +148,9 @@ class HomeFragment : Fragment() {
             requireActivity().startActivity(intentWithStringData)
         } else {
             val intent = Intent(requireActivity(), DetailSignLanguageActivity::class.java)
+            intent.putExtra(DetailSignLanguageActivity.TOKEN_KEY, token)
+            intent.putExtra(DetailSignLanguageActivity.STATUS_KATEGORI, true)
+            intent.putExtra(DetailSignLanguageActivity.STATUS_SUB_KATEGORI, false)
             requireActivity().startActivity(intent)
         }
 

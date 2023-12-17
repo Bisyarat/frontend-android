@@ -50,7 +50,8 @@ interface ApiService {
     @GET("api/status/kata")
     suspend fun getAllKata(
         @Header("Authorization") token: String,
-        @Query("nama_kategori") namaKategori: String,
+        @Query("nama_kategori") namaKategori: String? = null,
+        @Query("nama_sub_kategori ") namaSubKategori: String? = null,
     ): KataResponse
 
     //hapus

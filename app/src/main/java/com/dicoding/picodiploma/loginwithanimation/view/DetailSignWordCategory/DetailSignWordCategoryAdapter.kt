@@ -35,7 +35,7 @@ class DetailSignWordCategoryAdapter : ListAdapter<SignCategory, DetailSignWordCa
 //            Glide.with(itemView.context)
 //                .load(signCategory.photoUrl)
 //                .into(binding.imgItemPhoto)
-            binding.imgItemPhoto.setImageResource(signCategory.idPhoto)
+            signCategory.idPhoto?.let { binding.imgItemPhoto.setImageResource(it) }
         }
     }
     companion object {
