@@ -29,6 +29,11 @@ data class UserRegister(
     val password: String,
     val name: String
 )
+
+data class UserLogin(
+    val email: String,
+    val password: String,
+)
 class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService,
@@ -50,12 +55,13 @@ class UserRepository private constructor(
     fun login(user: UserModel) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.login(user.email!!, user.password!!)
+            val userLogin = UserLogin(user.email!!, user.password!!)
+            val successResponse = apiService.login(userLogin)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
-            emit(ResultState.Error(errorResponse.message!!))
+            emit(ResultState.Error(errorResponse.errors!!))
         }
     }
 

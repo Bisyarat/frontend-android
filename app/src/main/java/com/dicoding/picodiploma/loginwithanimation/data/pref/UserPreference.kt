@@ -23,7 +23,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[EMAIL_KEY] = user.email!!
             preferences[TOKEN_KEY] = user.token!!
             preferences[IS_LOGIN_KEY] = true
-            Log.d(ContentValues.TAG, "Token: ${preferences[TOKEN_KEY]}")
+//            Log.d(ContentValues.TAG, "Token: ${preferences[TOKEN_KEY]}")
         }
     }
 
