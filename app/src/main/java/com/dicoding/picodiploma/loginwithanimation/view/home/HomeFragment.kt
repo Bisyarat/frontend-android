@@ -68,6 +68,8 @@ class HomeFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvCategory.layoutManager = layoutManager
 
+        binding.tvUsername.text = "Hai, "+param2
+
         //hilangkan garis pemisah
 //        val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
 //        binding.rvCategory.addItemDecoration(itemDecoration)
