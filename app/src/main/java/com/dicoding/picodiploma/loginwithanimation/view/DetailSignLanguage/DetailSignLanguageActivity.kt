@@ -77,7 +77,6 @@ class DetailSignLanguageActivity : AppCompatActivity() {
                                                 listChecked.add(it.status)
                                             }
                                         }
-
                                     }
                                     val signCategory = listKategori.mapIndexed { index, element ->
                                         SignCategory(

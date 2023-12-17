@@ -21,6 +21,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -60,6 +61,12 @@ interface ApiService {
     suspend fun deleteLogoutUser(
         @Header("Authorization") token: String,
     ): LogoutResponse
+
+    @GET("api/kata/{id}")
+    suspend fun getKataById(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): KataResponse
 
     //hapus
     @GET("stories")
