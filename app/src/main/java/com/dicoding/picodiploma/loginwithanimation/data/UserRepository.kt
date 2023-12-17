@@ -1,7 +1,5 @@
 package com.dicoding.picodiploma.loginwithanimation.data
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.paging.Pager
@@ -10,8 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
-import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
-import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListKategoriItem
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentUserResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
@@ -19,10 +16,8 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryRes
 import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 
 data class UserRegister(
@@ -59,6 +54,18 @@ class UserRepository private constructor(
         try {
             val userLogin = UserLogin(user.email!!, user.password!!)
             val successResponse = apiService.login(userLogin)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+            emit(ResultState.Error(errorResponse.errors!!))
+        }
+    }
+
+    fun getCurrentUser(token: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getCurrentUser(token)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()

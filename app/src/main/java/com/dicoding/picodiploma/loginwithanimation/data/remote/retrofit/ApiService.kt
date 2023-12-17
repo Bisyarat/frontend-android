@@ -1,17 +1,18 @@
 package com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit
 
+import androidx.lifecycle.LiveData
 import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentUserResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.SubKategoriResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -29,6 +30,16 @@ interface ApiService {
     suspend fun login(
         @Body userLogin: UserLogin
     ): LoginResponse
+
+    @GET("api/users/current")
+    suspend fun getCurrentUser(
+        @Header("Authorization") token: String,
+    ): CurrentUserResponse
+
+    @GET("api/subkategori")
+    suspend fun getAllSubKategori(
+        @Header("Authorization") token: String,
+    ): SubKategoriResponse
 
     @GET("stories")
     suspend fun getStories(

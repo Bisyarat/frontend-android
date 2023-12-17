@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentUserResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import kotlinx.coroutines.launch
 
@@ -21,7 +22,4 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
             repository.logout()
         }
     }
-
-    fun getStories(token: String): LiveData<PagingData<ListStoryItem>> =
-        repository.getStories(token).cachedIn(viewModelScope)
 }

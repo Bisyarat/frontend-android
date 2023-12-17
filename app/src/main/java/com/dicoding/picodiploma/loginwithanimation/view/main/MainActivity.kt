@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             } else {
-                setupView(user.token!!)
+                setupView(user)
                 Log.d(TAG, "Token saved: ${user.token}")
             }
         }
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupView(token: String) {
+    private fun setupView(user: UserModel) {
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity() {
         }
         supportActionBar?.show()
 
-        val homeFragment = HomeFragment.newInstance(token, "param2")
+
+        val homeFragment = HomeFragment.newInstance(user.token!!, user.name!!)
         val profileFragment = ProfileFragment.newInstance("param1", "param2")
         replacedFragment(homeFragment)
 

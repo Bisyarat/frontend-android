@@ -8,4 +8,7 @@ class DetailSignWordCategoryViewModel(private val signCategoryRepository: SignCa
     fun getListCourseSignCategory() : List<SignCategory> {
         return signCategoryRepository.getListCourseSignCategory()
     }
+
+    fun getAllSubKategori(token: String) = signCategoryRepository.getAllSubKategori(token)
+
 }

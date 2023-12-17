@@ -59,16 +59,16 @@ class LoginActivity : AppCompatActivity() {
                 binding.passwordEditTextLayout.error = null
             }
 
-            if (!statePasswordText){
+            if (!statePasswordText) {
                 binding.passwordEditTextLayout.error = getString(R.string.error)
-            } else{
+            } else {
                 binding.passwordEditTextLayout.error = null
             }
 
             if ((validateEmailText) && (statePasswordText)) {
                 successValidate()
-            } else{
-                Toast.makeText(this, "gagal", Toast.LENGTH_SHORT ).show()
+            } else {
+                Toast.makeText(this, "gagal", Toast.LENGTH_SHORT).show()
             }
 
 
@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
         checkLoginFromApi(email, password)
     }
 
-    private fun alertBerhasil(){
+    private fun alertBerhasil() {
         AlertDialog.Builder(this).apply {
             setTitle("Yeah!")
             setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
@@ -123,9 +123,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkLoginFromApi(email: String, password: String) : Boolean{
+    private fun checkLoginFromApi(email: String, password: String): Boolean {
         var dataAvailable: Boolean = false
-        viewModel.login(UserModel("","",email,"",false,password)).observe(this) { result ->
+        viewModel.login(UserModel("", "", email, "", false, password)).observe(this) { result ->
             run {
                 if (result != null) {
                     when (result) {
@@ -133,15 +133,36 @@ class LoginActivity : AppCompatActivity() {
                             showLoading(true)
                             dataAvailable = false
                         }
+
                         is ResultState.Success -> {
                             val message = "Berhasil Login"
                             val token = result.data.dataResult.token
 
-                            showToast(message)
-                            showLoading(false)
-                            viewModel.saveSession(UserModel("","",email,token,false,""))
-                            alertBerhasil()
-                            dataAvailable = true
+                            viewModel.getCurrentUser(token).observe(this){ result ->
+                                run {
+                                    if (result != null) {
+                                        when (result) {
+                                            is ResultState.Loading -> {
+
+                                            }
+
+                                            is ResultState.Success -> {
+                                                val name = result.data.dataCurrentUserResult.name
+                                                showToast(message)
+                                                showLoading(false)
+
+                                                viewModel.saveSession(UserModel(name, "", email, token, false, ""))
+                                                alertBerhasil()
+                                                dataAvailable = true
+                                            }
+
+                                            is ResultState.Error -> {
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         is ResultState.Error -> {

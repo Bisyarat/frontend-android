@@ -23,8 +23,8 @@ import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM1 = "token"
+private const val ARG_PARAM2 = "namaUser"
 
 /**
  * A simple [Fragment] subclass.
@@ -42,14 +42,14 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var token: String? = null
+    private var namaUser: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            token = it.getString(ARG_PARAM1)
+            namaUser = it.getString(ARG_PARAM2)
         }
     }
 
@@ -68,12 +68,14 @@ class HomeFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvCategory.layoutManager = layoutManager
 
+        binding.tvUsername.text = "Hai, "+namaUser
+
         //hilangkan garis pemisah
 //        val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
 //        binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
-        signCategoryViewModel.getAllKategori(param1!!).observe(viewLifecycleOwner) { result ->
+        signCategoryViewModel.getAllKategori(token!!).observe(viewLifecycleOwner) { result ->
             run {
                 if (result != null) {
                     when (result) {
@@ -82,7 +84,7 @@ class HomeFragment : Fragment() {
                         }
 
                         is ResultState.Success -> {
-                            val message = "Berhasil Ambil Data"
+                            val message = "Berhasil Perbarui Data"
                             val listKategori = result.data.listKategori
                             val signCategory = listKategori.mapIndexed { index, element ->
                                 SignCategory(listGambar[index], "", element.namaKategori!!, 10)
@@ -118,17 +120,17 @@ class HomeFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param token Parameter 1.
+         * @param namaUser Parameter 2.
          * @return A new instance of fragment HomeFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(token: String, namaUser: String) =
             HomeFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_PARAM1, token)
+                    putString(ARG_PARAM2, namaUser)
                 }
             }
     }
@@ -141,8 +143,8 @@ class HomeFragment : Fragment() {
 
     private fun showSelectedCategory(signCategory: SignCategory) {
         if (signCategory.titleCategory == "Kata") {
-            val intentWithStringData =
-                Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
+            val intentWithStringData = Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
+            intentWithStringData.putExtra(DetailSignWordCategoryActivity.TOKEN_KEY, token)
             requireActivity().startActivity(intentWithStringData)
         } else {
             val intent = Intent(requireActivity(), DetailSignLanguageActivity::class.java)
