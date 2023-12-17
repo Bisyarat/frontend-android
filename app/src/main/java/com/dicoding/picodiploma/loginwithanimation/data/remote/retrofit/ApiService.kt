@@ -3,6 +3,7 @@ package com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit
 import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
@@ -49,4 +50,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("location") location: Int = 1,
     ): StoryResponse
+
+    //mulai dari sini
+    @GET("api/kategori")
+    suspend fun getAllKategori(
+        @Header("Authorization") token: String,
+    ): KategoriResponse
 }

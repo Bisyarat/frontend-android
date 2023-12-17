@@ -19,6 +19,7 @@ object Injection {
     }
 
     fun provideSignCategoryRepository(): SignCategoryRepository {
-        return SignCategoryRepository.getInstance()
+        val apiService = ApiConfig.getApiService()
+        return SignCategoryRepository.getInstance(apiService)
     }
 }

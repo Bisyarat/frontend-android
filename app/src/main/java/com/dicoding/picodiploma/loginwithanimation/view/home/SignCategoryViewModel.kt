@@ -9,4 +9,6 @@ class SignCategoryViewModel(private val signCategoryRepository: SignCategoryRepo
     fun getListCourseSignCategory() : List<SignCategory> {
         return signCategoryRepository.getListCourseSignCategory()
     }
+
+    fun getAllKategori(token: String) = signCategoryRepository.getAllKategori(token)
 }
