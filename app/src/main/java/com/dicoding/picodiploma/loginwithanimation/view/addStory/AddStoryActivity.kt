@@ -57,9 +57,9 @@ class AddStoryActivity : AppCompatActivity() {
 
         binding.uploadButton.setOnClickListener {
             viewModel.getSession().observe(this) { user ->
-                if (user.token.isNotEmpty()) {
+                if (user.token!!.isNotEmpty()) {
                     val token = user.token
-                    uploadImage(token)
+                    uploadImage(token!!)
                     showToast("Upload Data!!")
                 } else{
                     showToast("Gagal Upload Data!! token tidak ada")

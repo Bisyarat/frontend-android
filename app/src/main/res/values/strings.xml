@@ -41,5 +41,6 @@
     <string name="belajar_huruf">Belajar Huruf</string>
     <string name="selesai_30">Selesai 30%</string>
     <string name="hijau">Hijau</string>
+    <string name="alert_register">Berhasil membuat akun!</string>
 
 </resources>

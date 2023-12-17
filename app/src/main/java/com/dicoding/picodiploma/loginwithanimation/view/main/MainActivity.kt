@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin) {
+            if (true) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             } else{

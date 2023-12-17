@@ -72,11 +72,12 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun successValidate() {
+        val username = binding.nameEditText.text.toString()
+        val name = binding.nameText.text.toString()
         val email = binding.emailEditText.text.toString()
-        val name = binding.nameEditText.text.toString()
         val password = binding.passwordEditText.text.toString()
 
-        viewModel.register(UserModel(email, "", false, name, password)).observe(this) { result ->
+        viewModel.register(UserModel(name, username,  email,"",false, password)).observe(this) { result ->
             run {
                 if (result != null) {
                     when (result) {
@@ -84,7 +85,7 @@ class SignupActivity : AppCompatActivity() {
                             showLoading(true)
                         }
                         is ResultState.Success -> {
-                            showToast(result.data.message)
+                            showToast(getString(R.string.alert_register))
                             showLoading(false)
                             alertBerhasil(email)
                         }
@@ -146,7 +147,7 @@ class SignupActivity : AppCompatActivity() {
     private fun alertBerhasil(email: String){
         AlertDialog.Builder(this).apply {
             setTitle("Yeah!")
-            setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+            setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar Isyarat.")
             setPositiveButton("Lanjut") { _, _ ->
                 finish()
             }
