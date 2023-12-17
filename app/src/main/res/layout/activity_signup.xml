@@ -7,7 +7,6 @@
     tools:context=".view.signup.SignupActivity">
 
 
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
