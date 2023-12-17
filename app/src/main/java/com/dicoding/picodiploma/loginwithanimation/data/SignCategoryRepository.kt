@@ -54,7 +54,7 @@ class SignCategoryRepository private constructor(
         if (namaKategori){
             query = "Angka"
         } else if(namaSubKategori){
-            query = "Warna"
+            query = "Kata"
         }
         emit(ResultState.Loading)
         try {
