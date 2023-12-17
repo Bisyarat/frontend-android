@@ -1,5 +1,6 @@
 package com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit
 
+import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
@@ -23,11 +24,9 @@ interface ApiService {
        @Body userRegister: UserRegister
     ): RegisterResponse
 
-    @FormUrlEncoded
-    @POST("login")
+    @POST("api/users/login")
     suspend fun login(
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Body userLogin: UserLogin
     ): LoginResponse
 
     @GET("stories")

@@ -134,12 +134,12 @@ class LoginActivity : AppCompatActivity() {
                             dataAvailable = false
                         }
                         is ResultState.Success -> {
-                            val message = result.data.message!!
-                            val token = result.data.loginResult.token
+                            val message = "Berhasil Login"
+                            val token = result.data.dataResult.token
 
                             showToast(message)
                             showLoading(false)
-                            viewModel.saveSession(UserModel("","",email,"",false,password))
+                            viewModel.saveSession(UserModel("","",email,token,false,""))
                             alertBerhasil()
                             dataAvailable = true
                         }
