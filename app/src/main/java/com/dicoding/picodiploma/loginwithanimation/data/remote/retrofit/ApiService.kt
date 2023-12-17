@@ -5,6 +5,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentUserResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
@@ -36,11 +37,23 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): CurrentUserResponse
 
+    @GET("api/kategori")
+    suspend fun getAllKategori(
+        @Header("Authorization") token: String,
+    ): KategoriResponse
+
     @GET("api/subkategori")
     suspend fun getAllSubKategori(
         @Header("Authorization") token: String,
     ): SubKategoriResponse
 
+    @GET("api/status/kata")
+    suspend fun getAllKata(
+        @Header("Authorization") token: String,
+        @Query("nama_kategori") namaKategori: String,
+    ): KataResponse
+
+    //hapus
     @GET("stories")
     suspend fun getStories(
         @Header("Authorization") token: String,
@@ -61,10 +74,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("location") location: Int = 1,
     ): StoryResponse
+    //end hapus
 
-    //mulai dari sini
-    @GET("api/kategori")
-    suspend fun getAllKategori(
-        @Header("Authorization") token: String,
-    ): KategoriResponse
+
 }
