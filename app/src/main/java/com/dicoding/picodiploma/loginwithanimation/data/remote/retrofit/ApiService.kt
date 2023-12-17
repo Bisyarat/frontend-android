@@ -9,6 +9,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.response.Kategori
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.SubKategoriResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -34,6 +35,11 @@ interface ApiService {
     suspend fun getCurrentUser(
         @Header("Authorization") token: String,
     ): CurrentUserResponse
+
+    @GET("api/subkategori")
+    suspend fun getAllSubKategori(
+        @Header("Authorization") token: String,
+    ): SubKategoriResponse
 
     @GET("stories")
     suspend fun getStories(
