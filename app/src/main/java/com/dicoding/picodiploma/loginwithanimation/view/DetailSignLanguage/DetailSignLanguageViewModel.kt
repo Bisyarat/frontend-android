@@ -8,4 +8,6 @@ class DetailSignLanguageViewModel(private val signCategoryRepository: SignCatego
     fun getListCourseSignCategory() : List<SignCategory> {
         return signCategoryRepository.getListCourseSignCategory()
     }
+
+    fun getAllKata(token: String, namaKategori:Boolean = false, namaSubKategori:Boolean = false) = signCategoryRepository.getAllKata(token, namaKategori, namaSubKategori)
 }

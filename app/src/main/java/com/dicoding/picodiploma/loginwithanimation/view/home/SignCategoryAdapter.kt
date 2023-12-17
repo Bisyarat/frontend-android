@@ -36,7 +36,7 @@ class SignCategoryAdapter : ListAdapter<SignCategory, SignCategoryAdapter.MyView
 //            Glide.with(itemView.context)
 //                .load(signCategory.photoUrl)
 //                .into(binding.imgItemPhoto)
-            binding.imgItemPhoto.setImageResource(listKategoriItem.idPhoto)
+            listKategoriItem.idPhoto?.let { binding.imgItemPhoto.setImageResource(it) }
         }
     }
     companion object {

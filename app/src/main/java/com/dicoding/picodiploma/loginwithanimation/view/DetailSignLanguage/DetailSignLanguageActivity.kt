@@ -1,18 +1,29 @@
 package com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage
 
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailSignWordCategoryBinding
 import com.dicoding.picodiploma.loginwithanimation.view.DetailExercise.DetailExerciseActivity
+import com.dicoding.picodiploma.loginwithanimation.view.DetailSignWordCategory.DetailSignWordCategoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 
 class DetailSignLanguageActivity : AppCompatActivity() {
+    companion object {
+        const val TOKEN_KEY = "token_key"
+        const val STATUS_KATEGORI = "status_kategori"
+        const val STATUS_SUB_KATEGORI = "status_sub_kategori"
+    }
+
     private val detailSignLanguageViewModel: DetailSignLanguageViewModel by viewModels() {
         ViewModelFactory.getInstance(this)
     }
@@ -35,10 +46,68 @@ class DetailSignLanguageActivity : AppCompatActivity() {
 //        binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
-        val listCourseSignCategory = detailSignLanguageViewModel.getListCourseSignCategory()
-        setSignCategoryData(listCourseSignCategory)
 
-        DetailSignLanguageAdapter.setOnItemClickCallback(object: DetailSignLanguageAdapter.OnItemClickCallback{
+        val token = intent.getStringExtra(TOKEN_KEY)
+        val statusKategori = intent.getBooleanExtra(STATUS_KATEGORI, false)
+        val statusSubKategori = intent.getBooleanExtra(STATUS_SUB_KATEGORI, false)
+
+
+        if (token != null) {
+            Log.d(ContentValues.TAG, token)
+
+            //set recycler view
+            detailSignLanguageViewModel.getAllKata(token, statusKategori, statusSubKategori)
+                .observe(this) { result ->
+                    run {
+                        if (result != null) {
+                            when (result) {
+                                is ResultState.Loading -> {
+                                    showLoading(true)
+                                }
+
+                                is ResultState.Success -> {
+                                    val message = "Berhasil Perbarui Data"
+                                    val listKategori = result.data.kataItem
+                                    val listChecked = ArrayList<Boolean?>()
+                                    listKategori.forEach {
+                                        if (it.riwayatBelajarItem.isEmpty()){
+                                            listChecked.add(false)
+                                        } else{
+                                            it.riwayatBelajarItem.forEach {
+                                                listChecked.add(it.status)
+                                            }
+                                        }
+
+                                    }
+                                    val signCategory = listKategori.mapIndexed { index, element ->
+                                        SignCategory(
+                                            null,
+                                            "",
+                                            element.kata!!,
+                                            10,
+                                            listChecked[index]
+                                        )
+                                    }
+                                    setSignCategoryData(signCategory)
+                                    showToast(message)
+                                    showLoading(false)
+                                }
+
+                                is ResultState.Error -> {
+                                    showToast(result.error)
+                                    showLoading(false)
+                                }
+                            }
+                        }
+                    }
+
+//        setSignCategoryData(listCourseSignCategory)
+                }
+        }
+
+
+        DetailSignLanguageAdapter.setOnItemClickCallback(object :
+            DetailSignLanguageAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SignCategory) {
                 showSelected(data)
             }
@@ -52,10 +121,19 @@ class DetailSignLanguageActivity : AppCompatActivity() {
         binding.rvCategory.adapter = adapter
     }
 
-    private fun showSelected(signCategory: SignCategory){
+    private fun showSelected(signCategory: SignCategory) {
         val intent = Intent(this, DetailExerciseActivity::class.java)
         this.startActivity(intent)
 
-        Toast.makeText(this, "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

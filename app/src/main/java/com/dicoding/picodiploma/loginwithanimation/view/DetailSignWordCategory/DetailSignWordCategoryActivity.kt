@@ -105,7 +105,11 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
     }
 
     private fun showSelected(signCategory: SignCategory) {
+        val token = intent.getStringExtra(TOKEN_KEY)
         val intent = Intent(this, DetailSignLanguageActivity::class.java)
+        intent.putExtra(DetailSignLanguageActivity.TOKEN_KEY, token)
+        intent.putExtra(DetailSignLanguageActivity.STATUS_KATEGORI, false)
+        intent.putExtra(DetailSignLanguageActivity.STATUS_SUB_KATEGORI, true)
         this.startActivity(intent)
 
         Toast.makeText(this, "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT)

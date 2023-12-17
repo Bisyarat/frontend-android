@@ -49,6 +49,24 @@ class SignCategoryRepository private constructor(
         }
     }
 
+    fun getAllKata(token: String, namaKategori:Boolean = false, namaSubKategori:Boolean = false) = liveData {
+        var query: String? = null
+        if (namaKategori){
+            query = "Angka"
+        } else if(namaSubKategori){
+            query = "Kata"
+        }
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getAllKata(token, query)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, SubKategoriResponse::class.java)
+            emit(ResultState.Error(errorResponse.errors!!))
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: SignCategoryRepository? = null
