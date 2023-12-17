@@ -10,6 +10,8 @@ import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListKategoriItem
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
@@ -64,18 +66,6 @@ class UserRepository private constructor(
             emit(ResultState.Error(errorResponse.errors!!))
         }
     }
-
-//    fun getStories(token: String) = liveData {
-//        emit(ResultState.Loading)
-//        try {
-//            val successResponse = apiService.getStories("Bearer " + token)
-//            emit(ResultState.Success(successResponse))
-//        } catch (e: HttpException) {
-//            val errorBody = e.response()?.errorBody()?.string()
-//            val errorResponse = Gson().fromJson(errorBody, StoryResponse::class.java)
-//            emit(ResultState.Error(errorResponse.message!!))
-//        }
-//    }
 
     fun getStories(token: String): LiveData<PagingData<ListStoryItem>> {
         return Pager(

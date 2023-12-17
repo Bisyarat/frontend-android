@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class KategoriResponse(
     @field:SerializedName("data")
     val listKategori: List<ListKategoriItem> = emptyList(),
+
+    @field:SerializedName("errors")
+    val errors: String
 )
 
 data class ListKategoriItem (

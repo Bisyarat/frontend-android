@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListKategoriItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ItemRowCategoryBinding
 
 
@@ -28,14 +29,14 @@ class SignCategoryAdapter : ListAdapter<SignCategory, SignCategoryAdapter.MyView
 
     class MyViewHolder(private val binding: ItemRowCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(signCategory: SignCategory) {
-            binding.tvTitleCategory.text = signCategory.titleCategory
-            binding.tvProgressCategory.text = "Selesai ${signCategory.progressCategory}%"
-            binding.idLinearIndicator.progress = signCategory.progressCategory
+        fun bind(listKategoriItem: SignCategory) {
+            binding.tvTitleCategory.text = listKategoriItem.titleCategory
+            binding.tvProgressCategory.text = "Selesai ${listKategoriItem.progressCategory}%"
+            binding.idLinearIndicator.progress = listKategoriItem.progressCategory
 //            Glide.with(itemView.context)
 //                .load(signCategory.photoUrl)
 //                .into(binding.imgItemPhoto)
-            binding.imgItemPhoto.setImageResource(signCategory.idPhoto)
+            binding.imgItemPhoto.setImageResource(listKategoriItem.idPhoto)
         }
     }
     companion object {

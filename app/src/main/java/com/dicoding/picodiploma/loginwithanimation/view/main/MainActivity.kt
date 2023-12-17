@@ -54,8 +54,8 @@ class MainActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            } else{
-                setupView()
+            } else {
+                setupView(user.token!!)
                 Log.d(TAG, "Token saved: ${user.token}")
             }
         }
@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.action_logout ->  {
+        when (item.itemId) {
+            R.id.action_logout -> {
                 viewModel.logout()
             }
         }
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupView() {
+    private fun setupView(token: String) {
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -89,26 +89,28 @@ class MainActivity : AppCompatActivity() {
         }
         supportActionBar?.show()
 
-        val homeFragment = HomeFragment.newInstance("param1", "param2")
+        val homeFragment = HomeFragment.newInstance(token, "param2")
         val profileFragment = ProfileFragment.newInstance("param1", "param2")
         replacedFragment(homeFragment)
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.home_menu -> {
                     replacedFragment(homeFragment)
                     true
                 }
+
                 R.id.profile_menu -> {
                     replacedFragment(profileFragment)
                     true
                 }
+
                 else -> false
             }
         }
     }
 
-    private fun replacedFragment(fragment: Fragment){
+    private fun replacedFragment(fragment: Fragment) {
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout, fragment)
