@@ -23,6 +23,12 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 
+data class UserRegister(
+    val email: String,
+    val username: String,
+    val password: String,
+    val name: String
+)
 class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService,
@@ -31,12 +37,13 @@ class UserRepository private constructor(
     fun register(user: UserModel) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.register(user.name!!, user.email!!, user.password!!)
+            val userRegister = UserRegister(user.email!!, user.username!!, user.password!!, user.name!!)
+            val successResponse = apiService.register(userRegister)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
-            emit(ResultState.Error(errorResponse.message))
+            emit(ResultState.Error(errorResponse.errors))
         }
     }
 

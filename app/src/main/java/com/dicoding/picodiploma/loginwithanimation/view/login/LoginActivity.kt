@@ -125,7 +125,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkLoginFromApi(email: String, password: String) : Boolean{
         var dataAvailable: Boolean = false
-        viewModel.login(UserModel(email, "", false, null, password)).observe(this) { result ->
+        viewModel.login(UserModel("","",email,"",false,password)).observe(this) { result ->
             run {
                 if (result != null) {
                     when (result) {
@@ -139,7 +139,7 @@ class LoginActivity : AppCompatActivity() {
 
                             showToast(message)
                             showLoading(false)
-                            viewModel.saveSession(UserModel(email, token))
+                            viewModel.saveSession(UserModel("","",email,"",false,password))
                             alertBerhasil()
                             dataAvailable = true
                         }

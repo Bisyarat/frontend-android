@@ -118,8 +118,19 @@
 
                </androidx.constraintlayout.widget.ConstraintLayout>
            </androidx.cardview.widget.CardView>
-           
+
+           <androidx.media3.ui.PlayerView
+               android:id="@+id/player_view"
+               android:layout_width="100dp"
+               android:layout_height="100dp"
+               android:layout_marginStart="150dp"
+               android:layout_marginTop="8dp"
+               android:layout_marginEnd="8dp"
+               android:layout_marginBottom="8dp"
+               app:srcCompat="@drawable/ic_place_holder" />
+
            <Button
+               android:id="@+id/cameraButton"
                android:foreground="?android:attr/selectableItemBackground"
                android:clickable="true"
                android:layout_width="match_parent"
@@ -132,6 +143,22 @@
                android:layout_marginTop="5dp"
                android:layout_marginStart="15dp"
                android:layout_marginEnd="15dp"/>
+
+           <Button
+               android:id="@+id/galleryButton"
+               android:foreground="?android:attr/selectableItemBackground"
+               android:clickable="true"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Pilih Gallery"
+               app:icon="@drawable/baseline_sign_language_24"
+               app:iconGravity="textStart"
+               style="@style/Widget.MaterialComponents.Button.Icon"
+               app:backgroundTint="@color/primary"
+               android:layout_marginTop="5dp"
+               android:layout_marginStart="15dp"
+               android:layout_marginEnd="15dp"/>
+
        </LinearLayout>
 
 
