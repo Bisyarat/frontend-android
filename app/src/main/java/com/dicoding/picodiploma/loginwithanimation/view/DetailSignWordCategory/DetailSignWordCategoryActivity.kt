@@ -69,7 +69,7 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
                                 val message = "Berhasil Perbarui Data"
                                 val listKategori = result.data.subKategoriItem
                                 val signCategory = listKategori.mapIndexed { index, element ->
-                                    SignCategory(listGambar[index], "", element.namaKategori, 10)
+                                    SignCategory(null,listGambar[index], "", element.namaKategori, 10)
                                 }
                                 setSignCategoryData(signCategory)
                                 showToast(message)

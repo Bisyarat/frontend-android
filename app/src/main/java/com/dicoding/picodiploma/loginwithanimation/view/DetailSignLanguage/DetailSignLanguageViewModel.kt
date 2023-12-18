@@ -10,4 +10,6 @@ class DetailSignLanguageViewModel(private val signCategoryRepository: SignCatego
     }
 
     fun getAllKata(token: String, namaKategori:Boolean = false, namaSubKategori:Boolean = false) = signCategoryRepository.getAllKata(token, namaKategori, namaSubKategori)
+
+
 }

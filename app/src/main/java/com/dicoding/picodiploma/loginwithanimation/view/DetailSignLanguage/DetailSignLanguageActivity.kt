@@ -33,6 +33,8 @@ class DetailSignLanguageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val listIdKata = ArrayList<Int>()
+
         binding = ActivityDetailSignWordCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -70,17 +72,18 @@ class DetailSignLanguageActivity : AppCompatActivity() {
                                     val listKategori = result.data.kataItem
                                     val listChecked = ArrayList<Boolean?>()
                                     listKategori.forEach {
-                                        if (it.riwayatBelajarItem.isEmpty()){
+                                        if (it.riwayatBelajarItem.isEmpty()) {
                                             listChecked.add(false)
-                                        } else{
+                                        } else {
                                             it.riwayatBelajarItem.forEach {
                                                 listChecked.add(it.status)
                                             }
                                         }
-
                                     }
                                     val signCategory = listKategori.mapIndexed { index, element ->
+                                        listIdKata.add(element.id!!)
                                         SignCategory(
+                                            element.id,
                                             null,
                                             "",
                                             element.kata!!,
@@ -123,6 +126,7 @@ class DetailSignLanguageActivity : AppCompatActivity() {
 
     private fun showSelected(signCategory: SignCategory) {
         val intent = Intent(this, DetailExerciseActivity::class.java)
+        intent.putExtra(DetailExerciseActivity.ID_KEY, signCategory.idKata)
         this.startActivity(intent)
 
         Toast.makeText(this, "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT)

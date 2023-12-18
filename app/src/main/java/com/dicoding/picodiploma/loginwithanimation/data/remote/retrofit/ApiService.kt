@@ -5,6 +5,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentUserResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataByIdResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
@@ -21,6 +22,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -60,6 +62,11 @@ interface ApiService {
     suspend fun deleteLogoutUser(
         @Header("Authorization") token: String,
     ): LogoutResponse
+
+    @GET("api/kata/{id}")
+    suspend fun getKataById(
+        @Path("id") id: Int
+    ): KataByIdResponse
 
     //hapus
     @GET("stories")
