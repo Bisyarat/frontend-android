@@ -2,7 +2,6 @@ package com.dicoding.picodiploma.loginwithanimation.view.DetailExercise
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,26 +10,25 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.lifecycleScope
-import com.dicoding.picodiploma.loginwithanimation.R
+import androidx.appcompat.app.AppCompatActivity
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.SimpleExoPlayer
 import com.dicoding.picodiploma.loginwithanimation.data.ResultState
-import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityAddStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailExerciseBinding
 import com.dicoding.picodiploma.loginwithanimation.utils.getImageUri
-import com.dicoding.picodiploma.loginwithanimation.utils.reduceFileImage
-import com.dicoding.picodiploma.loginwithanimation.utils.uriToFile
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
-import com.dicoding.picodiploma.loginwithanimation.view.addStory.AddStoryViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
-import com.bumptech.glide.Glide
-import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
-import com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage.DetailSignLanguageActivity
+
 
 class DetailExerciseActivity : AppCompatActivity() {
+    var exoPlayer: SimpleExoPlayer? = null
+
     companion object {
         const val ID_KEY = "id_key"
+        const val STATUS_KATEGORI = "status_kategori"
+        const val STATUS_SUB_KATEGORI = "status_sub_kategori"
     }
 
     private val viewModel by viewModels<DetailExerciseViewModel> {
@@ -49,45 +47,13 @@ class DetailExerciseActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val id = intent.getIntExtra(ID_KEY, 0)
+        val statusKategori = intent.getBooleanExtra(STATUS_KATEGORI, false)
+        val statusSubKategori = intent.getBooleanExtra(STATUS_SUB_KATEGORI, false)
 
-        if (id != 0) {
-            viewModel.getKataById(id).observe(this) { result ->
-                run {
-                    if (result != null) {
-                        when (result) {
-                            is ResultState.Loading -> {
-                                showLoading(true)
-                            }
+        var id = intent.getIntExtra(ID_KEY, 0)
 
-                            is ResultState.Success -> {
-                                val message = "Berhasil Perbarui Data"
-                                val detailKata = result.data.kataByIdItem
-
-                                //putar video
-                                val videoItem = MediaItem.fromUri(detailKata.urlVideo!!)
-                                val player = ExoPlayer.Builder(this).build().also { exoPlayer ->
-                                    exoPlayer.setMediaItem(videoItem)
-                                    exoPlayer.prepare()
-                                }
-                                binding.playerViewCourse.player = player
-                                //End putar video
-
-                                binding.tvTitleExercise.text = detailKata.kata
-                                showToast(message)
-                                showLoading(false)
-                            }
-
-                            is ResultState.Error -> {
-                                showToast(result.error)
-                                showLoading(false)
-                            }
-                        }
-                    }
-                }
-
-
-            }
+        if (id != null) {
+            runDetailCourse(id)
         }
 
         binding.galleryButton.setOnClickListener {
@@ -99,6 +65,50 @@ class DetailExerciseActivity : AppCompatActivity() {
             showToast("Menjalankan Camera")
             startCamera()
         }
+
+        binding.btnNextCourse.setOnClickListener {
+            id = id + 1
+            if (statusKategori) {
+                if (id <= 9) {
+                    if (id != null) {
+                        runDetailCourse(id)
+                    }
+                } else {
+                    id = 9
+                }
+            } else if (statusSubKategori) {
+                if (id <= 15) {
+                    if (id != null) {
+                        runDetailCourse(id)
+                    }
+                } else {
+                    id = 15
+                }
+            }
+        }
+
+        binding.btnPreviousCourse.setOnClickListener {
+            id = id - 1
+            if (statusKategori) {
+                if (id > 0) {
+                    if (id != null) {
+                        runDetailCourse(id)
+                    }
+                } else {
+                    id = 1
+                }
+            } else if (statusSubKategori) {
+                if (id > 9) {
+                    if (id != null) {
+                        runDetailCourse(id)
+                    }
+                } else {
+                    id = 10
+                }
+            }
+        }
+
+
     }
 
     private fun startGallery() {
@@ -211,5 +221,44 @@ class DetailExerciseActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun runDetailCourse(id: Int) {
+        if (id != 0) {
+            viewModel.getKataById(id).observe(this) { result ->
+                run {
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showLoading(true)
+                            }
+
+                            is ResultState.Success -> {
+                                val detailKata = result.data.kataByIdItem
+
+                                //putar video
+                                val videoItem = MediaItem.fromUri(detailKata.urlVideo!!)
+                                val player = ExoPlayer.Builder(this).build().also { exoPlayer ->
+                                    exoPlayer.setMediaItem(videoItem)
+                                    exoPlayer.playWhenReady = true
+                                    exoPlayer.prepare()
+                                }
+
+                                binding.playerViewCourse.player = player
+                                //End putar video
+
+                                binding.tvTitleExercise.text = detailKata.kata
+                                showLoading(false)
+                            }
+
+                            is ResultState.Error -> {
+                                showToast(result.error)
+                                showLoading(false)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
