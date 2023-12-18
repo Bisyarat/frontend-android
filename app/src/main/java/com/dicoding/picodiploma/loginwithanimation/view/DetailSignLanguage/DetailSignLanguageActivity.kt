@@ -108,11 +108,10 @@ class DetailSignLanguageActivity : AppCompatActivity() {
                 }
         }
 
-
         DetailSignLanguageAdapter.setOnItemClickCallback(object :
             DetailSignLanguageAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SignCategory) {
-                showSelected(data)
+                showSelected(data, statusKategori, statusSubKategori)
             }
         })
 
@@ -124,9 +123,11 @@ class DetailSignLanguageActivity : AppCompatActivity() {
         binding.rvCategory.adapter = adapter
     }
 
-    private fun showSelected(signCategory: SignCategory) {
+    private fun showSelected(signCategory: SignCategory, namaKategori:Boolean = false, namaSubKategori:Boolean = false) {
         val intent = Intent(this, DetailExerciseActivity::class.java)
         intent.putExtra(DetailExerciseActivity.ID_KEY, signCategory.idKata)
+        intent.putExtra(DetailExerciseActivity.STATUS_KATEGORI, namaKategori)
+        intent.putExtra(DetailExerciseActivity.STATUS_SUB_KATEGORI, namaSubKategori)
         this.startActivity(intent)
 
         Toast.makeText(this, "Kamu memilih " + signCategory.titleCategory, Toast.LENGTH_SHORT)
