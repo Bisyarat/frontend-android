@@ -5,6 +5,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentUserResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataByIdResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
@@ -64,9 +65,8 @@ interface ApiService {
 
     @GET("api/kata/{id}")
     suspend fun getKataById(
-        @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): KataResponse
+    ): KataByIdResponse
 
     //hapus
     @GET("stories")

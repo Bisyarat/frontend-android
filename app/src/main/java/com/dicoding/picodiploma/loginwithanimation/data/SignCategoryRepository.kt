@@ -13,13 +13,13 @@ class SignCategoryRepository private constructor(
     private val apiService: ApiService,
 ){
     private val signCategory = mutableListOf<SignCategory>()
-    init {
-        if (signCategory.isEmpty()){
-            FakeSignCategoryDataSource.dummySignCategories.forEach{
-                signCategory.add(SignCategory(it.idPhoto, it.photoUrl, it.titleCategory, it.progressCategory))
-            }
-        }
-    }
+//    init {
+//        if (signCategory.isEmpty()){
+//            FakeSignCategoryDataSource.dummySignCategories.forEach{
+//                signCategory.add(SignCategory(it.idPhoto, it.photoUrl, it.titleCategory, it.progressCategory))
+//            }
+//        }
+//    }
 
     fun getListCourseSignCategory() : List<SignCategory> {
         return signCategory
@@ -67,10 +67,10 @@ class SignCategoryRepository private constructor(
         }
     }
 
-    fun getKataById(token: String, id:Int) = liveData {
+    fun getKataById(id:Int) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.getKataById(token, id)
+            val successResponse = apiService.getKataById(id)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()

@@ -24,10 +24,16 @@ import com.dicoding.picodiploma.loginwithanimation.view.addStory.AddStoryViewMod
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import com.bumptech.glide.Glide
+import com.dicoding.picodiploma.loginwithanimation.data.SignCategory
+import com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage.DetailSignLanguageActivity
 
 class DetailExerciseActivity : AppCompatActivity() {
+    companion object {
+        const val ID_KEY = "id_key"
+    }
 
-    private val viewModel by viewModels<AddStoryViewModel> {
+    private val viewModel by viewModels<DetailExerciseViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -42,6 +48,47 @@ class DetailExerciseActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val id = intent.getIntExtra(ID_KEY, 0)
+
+        if (id != 0) {
+            viewModel.getKataById(id).observe(this) { result ->
+                run {
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showLoading(true)
+                            }
+
+                            is ResultState.Success -> {
+                                val message = "Berhasil Perbarui Data"
+                                val detailKata = result.data.kataByIdItem
+
+                                //putar video
+                                val videoItem = MediaItem.fromUri(detailKata.urlVideo!!)
+                                val player = ExoPlayer.Builder(this).build().also { exoPlayer ->
+                                    exoPlayer.setMediaItem(videoItem)
+                                    exoPlayer.prepare()
+                                }
+                                binding.playerViewCourse.player = player
+                                //End putar video
+
+                                binding.tvTitleExercise.text = detailKata.kata
+                                showToast(message)
+                                showLoading(false)
+                            }
+
+                            is ResultState.Error -> {
+                                showToast(result.error)
+                                showLoading(false)
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
 
         binding.galleryButton.setOnClickListener {
             showToast("Menjalankan Gallery")
@@ -135,11 +182,11 @@ class DetailExerciseActivity : AppCompatActivity() {
                 exoPlayer.prepare()
             }
 
-            binding.playerView.player= player
+            binding.playerView.player = player
         }
     }
 
-    private fun alertBerhasil(){
+    private fun alertBerhasil() {
         AlertDialog.Builder(this).apply {
             setTitle("Yeah!")
             setMessage("Horee!! Story berhasil dibuat!")
@@ -154,11 +201,15 @@ class DetailExerciseActivity : AppCompatActivity() {
         }
     }
 
-//    private fun showLoading(isLoading: Boolean) {
+    //    private fun showLoading(isLoading: Boolean) {
 //        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
 //        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
 //    }
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
