@@ -18,6 +18,7 @@ import androidx.media3.exoplayer.SimpleExoPlayer
 import com.dicoding.picodiploma.loginwithanimation.data.ResultState
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailExerciseBinding
 import com.dicoding.picodiploma.loginwithanimation.utils.getImageUri
+import com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage.DetailSignLanguageActivity
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
 
@@ -26,6 +27,7 @@ class DetailExerciseActivity : AppCompatActivity() {
     var exoPlayer: SimpleExoPlayer? = null
 
     companion object {
+        const val TOKEN_KEY = "token_key"
         const val ID_KEY = "id_key"
         const val STATUS_KATEGORI = "status_kategori"
         const val STATUS_SUB_KATEGORI = "status_sub_kategori"
@@ -51,6 +53,8 @@ class DetailExerciseActivity : AppCompatActivity() {
         val statusSubKategori = intent.getBooleanExtra(STATUS_SUB_KATEGORI, false)
 
         var id = intent.getIntExtra(ID_KEY, 0)
+
+        val token = intent.getStringExtra(TOKEN_KEY)
 
         if (id != null) {
             runDetailCourse(id)
@@ -106,6 +110,34 @@ class DetailExerciseActivity : AppCompatActivity() {
                     id = 10
                 }
             }
+        }
+
+        binding.checkButton.setOnClickListener {
+            var link = "https://youtu.be/8FxecFFolfo?si=Xjvrj8vWqV3ScDwt"
+            if (token != null) {
+                viewModel.createRiwayatBelajar(token, true, link, id).observe(this) { result ->
+                    run {
+                        if (result != null) {
+                            when (result) {
+                                is ResultState.Loading -> {
+                                    showLoading(true)
+                                }
+
+                                is ResultState.Success -> {
+                                    val status = result.data.riwayatBelajar!!.status
+                                    showToast("Berhasil membuat riwayat belajar {$status}")
+                                }
+
+                                is ResultState.Error -> {
+                                    showToast(result.error)
+                                    showLoading(false)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
 

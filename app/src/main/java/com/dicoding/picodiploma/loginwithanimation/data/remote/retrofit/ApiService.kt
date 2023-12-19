@@ -1,6 +1,7 @@
 package com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit
 
 import androidx.lifecycle.LiveData
+import com.dicoding.picodiploma.loginwithanimation.data.RiwayatBelajarRequest
 import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
@@ -11,6 +12,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.response.Kategori
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LogoutResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RiwayatBelajarKataResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.StoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.SubKategoriResponse
 import okhttp3.MultipartBody
@@ -67,6 +69,12 @@ interface ApiService {
     suspend fun getKataById(
         @Path("id") id: Int
     ): KataByIdResponse
+
+    @POST("api/riwayat")
+    suspend fun createRiwayatBelajar(
+        @Header("Authorization") token: String,
+        @Body riwayatBelajarRequest: RiwayatBelajarRequest
+    ): RiwayatBelajarKataResponse
 
     //hapus
     @GET("stories")
