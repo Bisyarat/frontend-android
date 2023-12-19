@@ -5,6 +5,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.RiwayatBelajarRequest
 import com.dicoding.picodiploma.loginwithanimation.data.UserLogin
 import com.dicoding.picodiploma.loginwithanimation.data.UserRegister
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AddNewStoryResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentRiwayatBelajarResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.CurrentUserResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataByIdResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KataResponse
@@ -75,6 +76,11 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body riwayatBelajarRequest: RiwayatBelajarRequest
     ): RiwayatBelajarKataResponse
+
+    @GET("api/riwayat")
+    suspend fun getCurrentRiwayatBelajar(
+        @Header("Authorization") token: String,
+    ): CurrentRiwayatBelajarResponse
 
     //hapus
     @GET("stories")

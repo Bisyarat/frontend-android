@@ -2,6 +2,11 @@ package com.dicoding.picodiploma.loginwithanimation.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
+data class CurrentRiwayatBelajarResponse (
+    @field:SerializedName("data")
+    val riwayatBelajar: List<RiwayatBelajar> = emptyList(),
+)
+
 data class RiwayatBelajarKataResponse (
     @field:SerializedName("data")
     val riwayatBelajar: RiwayatBelajar? = null,
