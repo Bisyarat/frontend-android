@@ -108,6 +108,10 @@ class DetailExerciseActivity : AppCompatActivity() {
             }
         }
 
+        binding.checkButton.setOnClickListener {
+
+        }
+
 
     }
 
