@@ -31,7 +31,7 @@ class DetailSignLanguageAdapter : ListAdapter<SignCategory, DetailSignLanguageAd
         RecyclerView.ViewHolder(binding.root) {
         fun bind(signCategory: SignCategory) {
             binding.tvTitleCategory.text = signCategory.titleCategory
-            binding.checkSignLanguage.isChecked = true
+            binding.checkSignLanguage.isChecked = signCategory.isChecked!!
         }
     }
     companion object {
