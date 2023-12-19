@@ -1,13 +1,16 @@
 package com.dicoding.picodiploma.loginwithanimation.view.home
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.R
@@ -19,6 +22,10 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListKate
 import com.dicoding.picodiploma.loginwithanimation.databinding.FragmentHomeBinding
 import com.dicoding.picodiploma.loginwithanimation.view.DetailSignLanguage.DetailSignLanguageActivity
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,8 +38,11 @@ private const val ARG_PARAM2 = "namaUser"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+
 class HomeFragment : Fragment() {
     val listGambar = listOf(R.drawable.angka_logo, R.drawable.abc_logo)
+
 
     private val signCategoryViewModel: SignCategoryViewModel by activityViewModels() {
         ViewModelFactory.getInstance(requireActivity())
@@ -68,42 +78,140 @@ class HomeFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvCategory.layoutManager = layoutManager
 
-        binding.tvUsername.text = "Hai, "+namaUser
+        binding.tvUsername.text = "Hai, " + namaUser
 
         //hilangkan garis pemisah
 //        val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
 //        binding.rvCategory.addItemDecoration(itemDecoration)
 
         //set recycler view
-        signCategoryViewModel.getAllKategori(token!!).observe(viewLifecycleOwner) { result ->
-            run {
-                if (result != null) {
-                    when (result) {
-                        is ResultState.Loading -> {
-                            showLoading(true)
-                        }
+        if (token!!.isNotEmpty()) {
+            val progressCategory = ArrayList<Int>()
 
-                        is ResultState.Success -> {
-                            val message = "Berhasil Perbarui Data"
-                            val listKategori = result.data.listKategori
-                            val signCategory = listKategori.mapIndexed { index, element ->
-                                SignCategory(null, listGambar[index], "", element.namaKategori!!, 10)
+            var countStatus = 0
+            var countKategori = 0
+            var countProgressBar = 0
+            var countAngka = 0
+            var countKata = 0
+
+            signCategoryViewModel.getAllKata(token!!, true, false)
+                .observe(viewLifecycleOwner) { result ->
+                    run {
+                        if (result != null) {
+                            when (result) {
+                                is ResultState.Loading -> {
+                                }
+
+                                is ResultState.Success -> {
+                                    val listKategori = result.data.kataItem
+                                    val listChecked = ArrayList<Boolean?>()
+                                    listKategori.forEach {
+                                        if (it.riwayatBelajarItem.isEmpty()) {
+                                            listChecked.add(false)
+                                        } else {
+                                            it.riwayatBelajarItem.forEach {
+                                                listChecked.add(it.status)
+                                            }
+                                        }
+                                    }
+
+                                    val listTrueStatus = listChecked.filter { status ->
+                                        status == true
+                                    }
+
+                                    countKategori = listKategori.size
+                                    countStatus = listTrueStatus.size
+                                    countProgressBar = (countStatus * 100) / countKategori
+                                    countAngka = countProgressBar
+                                    progressCategory.add(countAngka)
+
+                                    signCategoryViewModel.getAllKata(token!!, false, true)
+                                        .observe(viewLifecycleOwner) { result ->
+                                            run {
+                                                if (result != null) {
+                                                    when (result) {
+                                                        is ResultState.Loading -> {
+                                                        }
+
+                                                        is ResultState.Success -> {
+                                                            val listKategori = result.data.kataItem
+                                                            val listChecked = ArrayList<Boolean?>()
+                                                            listKategori.forEach {
+                                                                if (it.riwayatBelajarItem.isEmpty()) {
+                                                                    listChecked.add(false)
+                                                                } else {
+                                                                    it.riwayatBelajarItem.forEach {
+                                                                        listChecked.add(it.status)
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            val listTrueStatus = listChecked.filter { status ->
+                                                                status == true
+                                                            }
+
+
+                                                            countKategori = listKategori.size
+                                                            countStatus = listTrueStatus.size
+                                                            countProgressBar = (countStatus * 100) / countKategori
+                                                            countKata = countProgressBar
+                                                            progressCategory.add(countKata)
+
+                                                            signCategoryViewModel.getAllKategori(token!!).observe(viewLifecycleOwner) { result ->
+                                                                run {
+                                                                    if (result != null) {
+                                                                        when (result) {
+                                                                            is ResultState.Loading -> {
+                                                                                showLoading(true)
+                                                                            }
+
+                                                                            is ResultState.Success -> {
+                                                                                val message = "Berhasil Perbarui Data"
+                                                                                val listKategori = result.data.listKategori
+
+                                                                                val signCategory = listKategori.mapIndexed { index, element ->
+
+                                                                                    SignCategory(
+                                                                                        null,
+                                                                                        listGambar[index],
+                                                                                        "",
+                                                                                        element.namaKategori!!,
+                                                                                        progressCategory[index]
+                                                                                    )
+                                                                                }
+
+                                                                                setSignCategoryData(signCategory)
+                                                                                showToast(message)
+                                                                                showLoading(false)
+
+                                                                            }
+
+                                                                            is ResultState.Error -> {
+                                                                                showToast(result.error)
+                                                                                showLoading(false)
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+
+//        setSignCategoryData(listCourseSignCategory)
+                                                            }
+                                                        }
+
+                                                        is ResultState.Error -> {
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                }
+
+                                is ResultState.Error -> {
+                                }
                             }
-                            setSignCategoryData(signCategory)
-                            showToast(message)
-                            showLoading(false)
-
-                        }
-
-                        is ResultState.Error -> {
-                            showToast(result.error)
-                            showLoading(false)
                         }
                     }
                 }
-            }
-
-//        setSignCategoryData(listCourseSignCategory)
         }
 
         SignCategoryAdapter.setOnItemClickCallback(object :
@@ -143,7 +251,8 @@ class HomeFragment : Fragment() {
 
     private fun showSelectedCategory(signCategory: SignCategory) {
         if (signCategory.titleCategory == "Kata") {
-            val intentWithStringData = Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
+            val intentWithStringData =
+                Intent(requireActivity(), DetailSignWordCategoryActivity::class.java)
             intentWithStringData.putExtra(DetailSignWordCategoryActivity.TOKEN_KEY, token)
             requireActivity().startActivity(intentWithStringData)
         } else {
@@ -165,5 +274,6 @@ class HomeFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
 
 }
