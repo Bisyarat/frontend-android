@@ -103,17 +103,16 @@ class DetailSignLanguageActivity : AppCompatActivity() {
                             }
                         }
                     }
-
-//        setSignCategoryData(listCourseSignCategory)
                 }
+
+            DetailSignLanguageAdapter.setOnItemClickCallback(object :
+                DetailSignLanguageAdapter.OnItemClickCallback {
+                override fun onItemClicked(data: SignCategory) {
+                    showSelected(data, statusKategori, statusSubKategori, token)
+                }
+            })
         }
 
-        DetailSignLanguageAdapter.setOnItemClickCallback(object :
-            DetailSignLanguageAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: SignCategory) {
-                showSelected(data, statusKategori, statusSubKategori)
-            }
-        })
 
     }
 
@@ -123,8 +122,14 @@ class DetailSignLanguageActivity : AppCompatActivity() {
         binding.rvCategory.adapter = adapter
     }
 
-    private fun showSelected(signCategory: SignCategory, namaKategori:Boolean = false, namaSubKategori:Boolean = false) {
+    private fun showSelected(
+        signCategory: SignCategory,
+        namaKategori: Boolean = false,
+        namaSubKategori: Boolean = false,
+        token: String
+    ) {
         val intent = Intent(this, DetailExerciseActivity::class.java)
+        intent.putExtra(DetailExerciseActivity.TOKEN_KEY, token)
         intent.putExtra(DetailExerciseActivity.ID_KEY, signCategory.idKata)
         intent.putExtra(DetailExerciseActivity.STATUS_KATEGORI, namaKategori)
         intent.putExtra(DetailExerciseActivity.STATUS_SUB_KATEGORI, namaSubKategori)

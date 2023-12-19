@@ -3,11 +3,13 @@ package com.dicoding.picodiploma.loginwithanimation.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.dicoding.picodiploma.loginwithanimation.data.dataDummy.FakeSignCategoryDataSource
+import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.KategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RiwayatBelajarKataResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.SubKategoriResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 
 data class RiwayatBelajarRequest(
@@ -98,7 +100,8 @@ class SignCategoryRepository private constructor(
                 emit(ResultState.Success(successResponse))
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
-                val errorResponse = Gson().fromJson(errorBody, RiwayatBelajarKataResponse::class.java)
+                val errorResponse =
+                    Gson().fromJson(errorBody, RiwayatBelajarKataResponse::class.java)
                 emit(ResultState.Error(errorResponse.errors!!))
             }
         }

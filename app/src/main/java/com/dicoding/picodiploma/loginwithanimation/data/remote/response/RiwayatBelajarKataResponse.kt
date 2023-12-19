@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class RiwayatBelajarKataResponse (
     @field:SerializedName("data")
-    val riwayatBelajar: List<RiwayatBelajar> = emptyList(),
+    val riwayatBelajar: RiwayatBelajar? = null,
 
     @field:SerializedName("errors")
     val errors: String,
