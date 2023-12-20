@@ -35,7 +35,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_username">Hai, Ihsan Fattah</string>
     <string name="judul_card_home">Perkembangan Kursus</string>
-    <string name="description_card_home">Progres Kamu Sudah Berjalan 60%, Semangat!</string>
+    <string name="description_card_home">Progres Kamu Sudah Berjalan 0%, Semangat!</string>
     <string name="kursus_saya">Kursus Saya</string>
     <string name="course_category">Course Category</string>
     <string name="belajar_huruf">Belajar Huruf</string>

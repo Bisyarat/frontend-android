@@ -100,6 +100,7 @@ class HomeFragment : Fragment() {
                         if (result != null) {
                             when (result) {
                                 is ResultState.Loading -> {
+                                    showLoading(true)
                                 }
 
                                 is ResultState.Success -> {
@@ -131,6 +132,7 @@ class HomeFragment : Fragment() {
                                                 if (result != null) {
                                                     when (result) {
                                                         is ResultState.Loading -> {
+                                                            showLoading(true)
                                                         }
 
                                                         is ResultState.Success -> {
@@ -146,59 +148,83 @@ class HomeFragment : Fragment() {
                                                                 }
                                                             }
 
-                                                            val listTrueStatus = listChecked.filter { status ->
-                                                                status == true
-                                                            }
+                                                            val listTrueStatus =
+                                                                listChecked.filter { status ->
+                                                                    status == true
+                                                                }
 
 
                                                             countKategori = listKategori.size
                                                             countStatus = listTrueStatus.size
-                                                            countProgressBar = (countStatus * 100) / countKategori
+                                                            countProgressBar =
+                                                                (countStatus * 100) / countKategori
                                                             countKata = countProgressBar
-                                                            progressCategory.add(countKata)
+                                                            if (countKata == 100) {
+                                                                progressCategory.add(countKata)
+                                                            } else {
+                                                                progressCategory.add(0)
+                                                            }
 
-                                                            signCategoryViewModel.getAllKategori(token!!).observe(viewLifecycleOwner) { result ->
-                                                                run {
-                                                                    if (result != null) {
-                                                                        when (result) {
-                                                                            is ResultState.Loading -> {
-                                                                                showLoading(true)
-                                                                            }
-
-                                                                            is ResultState.Success -> {
-                                                                                val message = "Berhasil Perbarui Data"
-                                                                                val listKategori = result.data.listKategori
-
-                                                                                val signCategory = listKategori.mapIndexed { index, element ->
-
-                                                                                    SignCategory(
-                                                                                        null,
-                                                                                        listGambar[index],
-                                                                                        "",
-                                                                                        element.namaKategori!!,
-                                                                                        progressCategory[index]
-                                                                                    )
+                                                            signCategoryViewModel.getAllKategori(
+                                                                token!!
+                                                            )
+                                                                .observe(viewLifecycleOwner) { result ->
+                                                                    run {
+                                                                        if (result != null) {
+                                                                            when (result) {
+                                                                                is ResultState.Loading -> {
+                                                                                    showLoading(true)
                                                                                 }
 
-                                                                                setSignCategoryData(signCategory)
-                                                                                showToast(message)
-                                                                                showLoading(false)
+                                                                                is ResultState.Success -> {
+                                                                                    val message =
+                                                                                        "Berhasil Perbarui Data"
+                                                                                    val listKategori =
+                                                                                        result.data.listKategori
 
-                                                                            }
+                                                                                    val signCategory =
+                                                                                        listKategori.mapIndexed { index, element ->
 
-                                                                            is ResultState.Error -> {
-                                                                                showToast(result.error)
-                                                                                showLoading(false)
+                                                                                            SignCategory(
+                                                                                                null,
+                                                                                                listGambar[index],
+                                                                                                "",
+                                                                                                element.namaKategori!!,
+                                                                                                progressCategory[index]
+                                                                                            )
+                                                                                        }
+                                                                                    val filter100 = progressCategory.filter { value -> value == 100 }
+                                                                                    val progressCircular = progressCategory.size
+                                                                                    val persen = (filter100.size * 100)/progressCircular
+                                                                                    setProgressTotalCourse(persen)
+
+                                                                                    setSignCategoryData(
+                                                                                        signCategory
+                                                                                    )
+                                                                                    showToast(
+                                                                                        message
+                                                                                    )
+                                                                                    showLoading(
+                                                                                        false
+                                                                                    )
+
+                                                                                }
+
+                                                                                is ResultState.Error -> {
+                                                                                    showToast(result.error)
+                                                                                    showLoading(
+                                                                                        false
+                                                                                    )
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
-                                                                }
 
-//        setSignCategoryData(listCourseSignCategory)
-                                                            }
+                                                                }
                                                         }
 
                                                         is ResultState.Error -> {
+                                                            showToast(result.error)
                                                         }
                                                     }
                                                 }
@@ -207,6 +233,7 @@ class HomeFragment : Fragment() {
                                 }
 
                                 is ResultState.Error -> {
+                                    showToast(result.error)
                                 }
                             }
                         }
@@ -248,6 +275,13 @@ class HomeFragment : Fragment() {
         adapter.submitList(signCategory)
         binding.rvCategory.adapter = adapter
     }
+
+    private fun setProgressTotalCourse(progress: Int) {
+        binding.circularProgressIndicator.progress = progress
+        binding.progressTv.text = "$progress%"
+        binding.tvWelcomeProgress.text = "Progres Kamu Sudah Berjalan $progress%, Semangat!"
+    }
+
 
     private fun showSelectedCategory(signCategory: SignCategory) {
         if (signCategory.titleCategory == "Kata") {
