@@ -107,7 +107,6 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
                                                     }
 
                                                     is ResultState.Success -> {
-                                                        val message = "Berhasil Perbarui Data"
                                                         val listKategori = result.data.subKategoriItem
                                                         val signCategory = listKategori.mapIndexed { index, element ->
                                                             SignCategory(
@@ -119,7 +118,6 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
                                                             )
                                                         }
                                                         setSignCategoryData(signCategory)
-                                                        showToast(message)
                                                         showLoading(false)
                                                     }
 
@@ -131,7 +129,6 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
                                             }
                                         }
 
-//        setSignCategoryData(listCourseSignCategory)
                                     }
 
                                 }

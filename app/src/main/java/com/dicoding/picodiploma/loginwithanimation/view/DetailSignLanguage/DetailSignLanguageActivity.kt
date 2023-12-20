@@ -68,7 +68,6 @@ class DetailSignLanguageActivity : AppCompatActivity() {
                                 }
 
                                 is ResultState.Success -> {
-                                    val message = "Berhasil Perbarui Data"
                                     val listKategori = result.data.kataItem
                                     val listChecked = ArrayList<Boolean?>()
                                     listKategori.forEach {
@@ -92,7 +91,6 @@ class DetailSignLanguageActivity : AppCompatActivity() {
                                         )
                                     }
                                     setSignCategoryData(signCategory)
-                                    showToast(message)
                                     showLoading(false)
                                 }
 

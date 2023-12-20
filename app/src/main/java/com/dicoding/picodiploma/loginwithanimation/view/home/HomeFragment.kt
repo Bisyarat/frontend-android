@@ -193,10 +193,15 @@ class HomeFragment : Fragment() {
                                                                                                 progressCategory[index]
                                                                                             )
                                                                                         }
-                                                                                    val filter100 = progressCategory.filter { value -> value == 100 }
-                                                                                    val progressCircular = progressCategory.size
-                                                                                    val persen = (filter100.size * 100)/progressCircular
-                                                                                    setProgressTotalCourse(persen)
+                                                                                    val filter100 =
+                                                                                        progressCategory.filter { value -> value == 100 }
+                                                                                    val progressCircular =
+                                                                                        progressCategory.size
+                                                                                    val persen =
+                                                                                        (filter100.size * 100) / progressCircular
+                                                                                    setProgressTotalCourse(
+                                                                                        persen
+                                                                                    )
 
                                                                                     setSignCategoryData(
                                                                                         signCategory
