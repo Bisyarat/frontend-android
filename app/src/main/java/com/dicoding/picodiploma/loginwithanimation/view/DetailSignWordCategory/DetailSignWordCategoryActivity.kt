@@ -54,38 +54,95 @@ class DetailSignWordCategoryActivity : AppCompatActivity() {
 
 
         if (token != null) {
+            val progressCategory = ArrayList<Int>()
+
+            var countStatus = 0
+            var countKategori = 0
+            var countProgressBar = 0
+            var countKata = 0
+
             Log.d(TAG, token)
-
-            //set recycler view
-            detailSignWordCategoryViewModel.getAllSubKategori(token).observe(this) { result ->
-                run {
-                    if (result != null) {
-                        when (result) {
-                            is ResultState.Loading -> {
-                                showLoading(true)
-                            }
-
-                            is ResultState.Success -> {
-                                val message = "Berhasil Perbarui Data"
-                                val listKategori = result.data.subKategoriItem
-                                val signCategory = listKategori.mapIndexed { index, element ->
-                                    SignCategory(null,listGambar[index], "", element.namaKategori, 10)
+            detailSignWordCategoryViewModel.getAllKata(token!!, false, true)
+                .observe(this) { result ->
+                    run {
+                        if (result != null) {
+                            when (result) {
+                                is ResultState.Loading -> {
+                                    showLoading(true)
                                 }
-                                setSignCategoryData(signCategory)
-                                showToast(message)
-                                showLoading(false)
-                            }
 
-                            is ResultState.Error -> {
-                                showToast(result.error)
-                                showLoading(false)
+                                is ResultState.Success -> {
+                                    val listKategori = result.data.kataItem
+                                    val listChecked = ArrayList<Boolean?>()
+                                    listKategori.forEach {
+                                        if (it.riwayatBelajarItem.isEmpty()) {
+                                            listChecked.add(false)
+                                        } else {
+                                            it.riwayatBelajarItem.forEach {
+                                                listChecked.add(it.status)
+                                            }
+                                        }
+                                    }
+
+                                    val listTrueStatus =
+                                        listChecked.filter { status ->
+                                            status == true
+                                        }
+
+
+                                    countKategori = listKategori.size
+                                    countStatus = listTrueStatus.size
+                                    countProgressBar =
+                                        (countStatus * 100) / countKategori
+                                    countKata = countProgressBar
+                                    progressCategory.add(countKata)
+
+                                    //set recycler view
+                                    detailSignWordCategoryViewModel.getAllSubKategori(token).observe(this) { result ->
+                                        run {
+                                            if (result != null) {
+                                                when (result) {
+                                                    is ResultState.Loading -> {
+                                                        showLoading(true)
+                                                    }
+
+                                                    is ResultState.Success -> {
+                                                        val message = "Berhasil Perbarui Data"
+                                                        val listKategori = result.data.subKategoriItem
+                                                        val signCategory = listKategori.mapIndexed { index, element ->
+                                                            SignCategory(
+                                                                null,
+                                                                listGambar[index],
+                                                                "",
+                                                                element.namaKategori,
+                                                                progressCategory[index]
+                                                            )
+                                                        }
+                                                        setSignCategoryData(signCategory)
+                                                        showToast(message)
+                                                        showLoading(false)
+                                                    }
+
+                                                    is ResultState.Error -> {
+                                                        showToast(result.error)
+                                                        showLoading(false)
+                                                    }
+                                                }
+                                            }
+                                        }
+
+//        setSignCategoryData(listCourseSignCategory)
+                                    }
+
+                                }
+
+                                is ResultState.Error -> {
+                                    showToast(result.error)
+                                }
                             }
                         }
                     }
                 }
-
-//        setSignCategoryData(listCourseSignCategory)
-            }
         }
 
 
