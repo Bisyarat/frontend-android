@@ -11,4 +11,6 @@ class SignCategoryViewModel(private val signCategoryRepository: SignCategoryRepo
     }
 
     fun getAllKategori(token: String) = signCategoryRepository.getAllKategori(token)
+
+    fun getAllKata(token: String, namaKategori:Boolean = false, namaSubKategori:Boolean = false) = signCategoryRepository.getAllKata(token, namaKategori, namaSubKategori)
 }
