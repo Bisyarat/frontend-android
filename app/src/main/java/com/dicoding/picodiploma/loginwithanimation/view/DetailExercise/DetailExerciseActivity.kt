@@ -31,6 +31,7 @@ class DetailExerciseActivity : AppCompatActivity() {
         const val ID_KEY = "id_key"
         const val STATUS_KATEGORI = "status_kategori"
         const val STATUS_SUB_KATEGORI = "status_sub_kategori"
+        const val RIWAYAT_NOT_FOUND = "Riwayat is not found"
     }
 
     private val viewModel by viewModels<DetailExerciseViewModel> {
@@ -115,7 +116,7 @@ class DetailExerciseActivity : AppCompatActivity() {
         binding.checkButton.setOnClickListener {
             var link = "https://youtu.be/8FxecFFolfo?si=Xjvrj8vWqV3ScDwt"
             if (token != null) {
-                viewModel.createRiwayatBelajar(token, true, link, id).observe(this) { result ->
+                viewModel.getCurrentStatusKataById(token, id).observe(this) { result ->
                     run {
                         if (result != null) {
                             when (result) {
@@ -124,18 +125,25 @@ class DetailExerciseActivity : AppCompatActivity() {
                                 }
 
                                 is ResultState.Success -> {
-                                    val status = result.data.riwayatBelajar!!.status
-                                    showToast("Berhasil membuat riwayat belajar {$status}")
+                                    val status = result.data.currentRiwayatByIdKataItem!!.status
+                                    if (status == true){
+                                        showToast("Materi ini telah selesai!")
+                                    }
                                 }
 
                                 is ResultState.Error -> {
-                                    showToast(result.error)
+                                    if (result.error == RIWAYAT_NOT_FOUND){
+                                        addRiwayatBelajar(token, link, id, statusKategori, statusSubKategori)
+                                    } else{
+                                        showToast(result.error)
+                                    }
                                     showLoading(false)
                                 }
                             }
                         }
                     }
                 }
+
             }
         }
 
@@ -227,13 +235,15 @@ class DetailExerciseActivity : AppCompatActivity() {
         }
     }
 
-    private fun alertBerhasil() {
+    private fun alertBerhasil(token: String, statusKategori: Boolean, statusSubKategori: Boolean) {
         AlertDialog.Builder(this).apply {
             setTitle("Yeah!")
-            setMessage("Horee!! Story berhasil dibuat!")
+            setMessage("Horee!! Materi ini berhasil diselesaikan!")
             setPositiveButton("Lanjut") { _, _ ->
-                val intent = Intent(context, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                val intent = Intent(context, DetailSignLanguageActivity::class.java)
+                intent.putExtra(DetailSignLanguageActivity.TOKEN_KEY, token)
+                intent.putExtra(DetailSignLanguageActivity.STATUS_KATEGORI, statusKategori)
+                intent.putExtra(DetailSignLanguageActivity.STATUS_SUB_KATEGORI, statusSubKategori)
                 startActivity(intent)
                 finish()
             }
@@ -286,6 +296,30 @@ class DetailExerciseActivity : AppCompatActivity() {
                                 showToast(result.error)
                                 showLoading(false)
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addRiwayatBelajar(token: String, link: String, id: Int, statusKategori: Boolean, statusSubKategori: Boolean){
+        viewModel.createRiwayatBelajar(token, true, link, id).observe(this) { result ->
+            run {
+                if (result != null) {
+                    when (result) {
+                        is ResultState.Loading -> {
+                            showLoading(true)
+                        }
+
+                        is ResultState.Success -> {
+//                            val status = result.data.riwayatBelajar!!.status
+                            alertBerhasil(token, statusKategori, statusSubKategori)
+                        }
+
+                        is ResultState.Error -> {
+                            showToast(result.error)
+                            showLoading(false)
                         }
                     }
                 }

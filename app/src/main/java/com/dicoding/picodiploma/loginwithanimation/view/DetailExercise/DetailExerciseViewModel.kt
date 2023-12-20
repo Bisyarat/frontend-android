@@ -19,4 +19,7 @@ class DetailExerciseViewModel(private val signCategoryRepository: SignCategoryRe
             token,
             status, url_video, id_kata
         )
+
+    fun getCurrentStatusKataById(token: String, id: Int) =
+        signCategoryRepository.getCurrentStatusKataById(token, id)
 }

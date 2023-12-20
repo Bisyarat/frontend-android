@@ -106,6 +106,18 @@ class SignCategoryRepository private constructor(
             }
         }
 
+    fun getCurrentStatusKataById(token: String, id: Int) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getCurrentStatusKataById(token, id)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, SubKategoriResponse::class.java)
+            emit(ResultState.Error(errorResponse.errors!!))
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: SignCategoryRepository? = null
